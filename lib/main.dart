@@ -74,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
         final user = authService.currentUser();
 
         return Scaffold(
-          appBar: AppBar(title: Text("로그인")),
+          appBar: AppBar(title: Text("로그인!")),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
             child: Column(
