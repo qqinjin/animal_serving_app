@@ -394,7 +394,7 @@ class _AddPetState extends State<AddPet> {
 
         return Scaffold(
           appBar: AppBar(
-            title: Text("반려동물추가ㅎㅎ"),
+            title: Text("ㅎㅎ반려동물추가ㅎㅎ"),
             actions: [
               TextButton(
                 child: Text(
