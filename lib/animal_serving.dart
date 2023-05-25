@@ -30,7 +30,14 @@ class _HomePageState extends State<HomePage2> {
   }
 
   Future<void> _getPetNamesFromFirestore() async {
-    FirebaseFirestore.instance.collection('pet').get().then((QuerySnapshot querySnapshot) {
+
+    final user = context.read<AuthService>().currentUser();
+    final uid = user?.uid;
+
+    FirebaseFirestore.instance
+        .collection('pet')
+        .where('uid', isEqualTo: uid)
+        .get().then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
         setState(() {
           petNames.add(doc.get('petname'));
