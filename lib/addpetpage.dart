@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+//import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,13 +14,20 @@ class AddPet extends StatefulWidget {
   @override
   State<AddPet> createState() => _AddPetState();
 }
+//final AddPetService addPetService = Provider.of<AddPetService>(context, listen: false);
 
 class _AddPetState extends State<AddPet> {
   TextEditingController petController = TextEditingController();
+  TextEditingController breedController = TextEditingController(); //종
+  TextEditingController nameController = TextEditingController(); //이름
+  TextEditingController ageController = TextEditingController(); // 나이
+  TextEditingController genderController = TextEditingController(); //성별
+  TextEditingController weightController = TextEditingController(); //체중
+
   @override
   Widget build(BuildContext context) {
     return Consumer<AddPetService>(
-      builder: (context, addpet_service, child) {
+      builder: (context, addpetService, child) {
         // ignore: unused_local_variable
         final authService = context.read<AuthService>();
         // ignore: unused_local_variable
@@ -52,28 +59,126 @@ class _AddPetState extends State<AddPet> {
           ),
           body: Column(
             children: [
-              /// 입력창
+              Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: breedController,
+                              decoration: InputDecoration(
+                                hintText: '종',
+                              ),
+                              onChanged: (value) {
+                                // 값이 변경되면 컨트롤러의 값도 업데이트
+                                breedController.text = value;
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: nameController,
+                              decoration: InputDecoration(
+                                hintText: '이름',
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: ageController,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                hintText: '나이',
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: genderController,
+                              decoration: InputDecoration(
+                                hintText: '성별',
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: weightController,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                hintText: '무게',
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8),
                 child: Row(
                   children: [
-                    /// 텍스트 입력창
-                    Expanded(
-                      child: TextField(
-                        controller: petController,
-                        decoration: InputDecoration(
-                          hintText: "하고 싶은 일을 입력해주세요.",
-                        ),
-                      ),
-                    ),
-
-                    /// 추가 버튼
+                    // Expanded(
+                    //   child: TextField(
+                    //     controller: petController,
+                    //     decoration: InputDecoration(
+                    //       hintText: "하고 싶은 일을 입력해주세요.",
+                    //     ),
+                    //   ),
+                    // ),
                     ElevatedButton(
                       child: Icon(Icons.add),
                       onPressed: () {
-                        // create bucket
-                        if (petController.text.isNotEmpty) {
-                          addpet_service.create(petController.text, user.uid);
+                        if (breedController.text.isNotEmpty &&
+                            genderController.text.isNotEmpty &&
+                            ageController.text.isNotEmpty &&
+                            weightController.text.isNotEmpty &&
+                            nameController.text.isNotEmpty) {
+                          addpetService.create(
+                              breedController.text,
+                              nameController.text,
+                              ageController.text,
+                              weightController.text,
+                              genderController.text,
+                              user.uid);
+                          breedController.clear();
+                          genderController.clear();
+                          ageController.clear();
+                          weightController.clear();
+                          nameController.clear();
                         }
                       },
                     ),
@@ -81,55 +186,6 @@ class _AddPetState extends State<AddPet> {
                 ),
               ),
               Divider(height: 1),
-
-              /// 버킷 리스트
-              Expanded(
-                child: FutureBuilder<QuerySnapshot>(
-                    future: addpet_service.read(user.uid),
-                    builder: (context, snapshot) {
-                      //print(snapshot.hasData);
-                      // ignore: unused_local_variable
-                      final documents = snapshot.data?.docs ?? [];
-                      if (documents.isEmpty) {
-                        return const Center(child: Text("버킷 리스트를 작성해주세요."));
-                      }
-                      return ListView.builder(
-                        itemCount: documents.length,
-                        itemBuilder: (context, index) {
-                          final doc = documents[index];
-                          String job = doc.get('job');
-                          bool isDone = doc.get('isDone');
-                          return ListTile(
-                            title: Text(
-                              job,
-                              style: TextStyle(
-                                fontSize: 24,
-                                //color: isDone ? Colors.grey : Colors.black,
-                                decoration: isDone
-                                    // ignore: dead_code
-                                    ? TextDecoration.lineThrough
-                                    : TextDecoration.none,
-                              ),
-                            ),
-                            // 삭제 아이콘 버튼
-                            trailing: IconButton(
-                              icon: Icon(CupertinoIcons.delete),
-                              onPressed: () {
-                                // 삭제 버튼 클릭시
-
-                                addpet_service.delete(doc.id); //만든 delete함수 호출
-                              },
-                            ),
-                            onTap: () {
-                              // 아이템 클릭하여 isDone 업데이트
-
-                              addpet_service.update(doc.id, !isDone);
-                            },
-                          );
-                        },
-                      );
-                    }),
-              ),
             ],
           ),
         );
