@@ -16,6 +16,8 @@ import 'loginpage.dart';
 import 'addpetpage.dart';
 import 'bucketlistpage.dart';
 
+import 'animal_serving.dart';
+import 'animal_serving_service.dart';
 // void main() {
 //   runApp(const MyApp());
 // }
@@ -31,6 +33,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => BucketService()),
         //ChangeNotifierProvider(create: (context) => StartPage()),
         ChangeNotifierProvider(create: (context) => AddPetService()),
+        ChangeNotifierProvider(create: (context) => AnimalServingService()),
       ],
       child: const MyApp(),
     ),
@@ -107,7 +110,7 @@ class _StartPageState extends State<StartPage> {
               child: Text('배식하기'),
               onPressed: () {
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => HomePage()));
+                    context, MaterialPageRoute(builder: (_) => HomePage2()));
               }),
           ElevatedButton(
               child: Text('개인정보수정'),
