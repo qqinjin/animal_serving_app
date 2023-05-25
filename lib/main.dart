@@ -15,6 +15,7 @@ import 'loginpage.dart';
 
 import 'addpetpage.dart';
 import 'bucketlistpage.dart';
+import 'State_Checkpage.dart';
 
 // void main() {
 //   runApp(const MyApp());
@@ -101,7 +102,7 @@ class _StartPageState extends State<StartPage> {
               child: Text('배식 / 건강상태'),
               onPressed: () {
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => HomePage()));
+                    context, MaterialPageRoute(builder: (_) => Statepage()));
               }),
           ElevatedButton(
               child: Text('배식하기'),

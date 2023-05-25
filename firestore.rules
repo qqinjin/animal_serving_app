@@ -1,0 +1,17 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /bucket/{document} {
+      // document의 uid와 일치하는 유저만 RUD 가능
+      allow read, update, delete: if request.auth != null && request.auth.uid == resource.data.uid;
+      // Create의 경우, 로그인 되어있으면 가능
+      allow create: if request.auth != null;
+    }
+    match /pet/{document} {
+      // 모든 사용자가 읽을 수 있도록 허용
+      allow read: if true;
+      // 나머지 작업은 인증된 사용자만 허용
+      allow write: if request.auth != null;
+    }
+  }
+}
