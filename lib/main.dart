@@ -74,7 +74,7 @@ class _StartPageState extends State<StartPage> {
           child: Column(
         children: [
           ElevatedButton(
-              child: Text('반려동물 추가'),
+              child: Text('반려동물 추가gg'),
               onPressed: () {
                 //Second page 불러오기
                 //Second page는 스택 상에서 이미 존재하는 First page위에 올라감
