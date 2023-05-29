@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'HealthPage.dart';
+import 'DistributePage.dart';
 class PetDetailPage extends StatelessWidget {
   final String petName;
 
@@ -19,22 +20,42 @@ class PetDetailPage extends StatelessWidget {
           SizedBox(height: 30.0), // 상단 여백
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Card(
-              child: ListTile(
-                leading: Icon(Icons.restaurant),
-                title: Text('배식 상황'),
-                subtitle: Text('현재 반려동물의 배식상황을 확인해보세요.'),
+            child: GestureDetector(
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DistributePage(),
+                  ),
+                );
+              },
+              child: Card(
+                child: ListTile(
+                  leading: Icon(Icons.restaurant),
+                  title: Text('배식 상황'),
+                  subtitle: Text('현재 반려동물의 배식상황을 확인해보세요.'),
+                ),
               ),
             ),
           ),
-          SizedBox(height: 30.0), // 리스트 항목 사이 간격 (분할선)
+          SizedBox(height: 30.0), // 리스트 항목 사이 간격
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Card(
-              child: ListTile(
-                leading: Icon(Icons.favorite),
-                title: Text('건강 상태'),
-                subtitle: Text('반려동물의 건강상태를 확인해보세요.'),
+            child: GestureDetector(
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HealthPage(),
+                  ),
+                );
+              },
+              child: Card(
+                child: ListTile(
+                  leading: Icon(Icons.favorite),
+                  title: Text('건강 상태'),
+                  subtitle: Text('반려동물의 건강상태를 확인해보세요.'),
+                ),
               ),
             ),
           ),
@@ -44,3 +65,4 @@ class PetDetailPage extends StatelessWidget {
     );
   }
 }
+
