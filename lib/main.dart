@@ -68,7 +68,7 @@ class _StartPageState extends State<StartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('First page'),
+        title: Text('First pageee'),
       ),
       body: Center(
           child: Column(
@@ -92,7 +92,7 @@ class _StartPageState extends State<StartPage> {
                 //context: context가 가지고 있는 위젯트리의 위치 정보에 근거하여 현재 화면상에 보이는 페이지 위치를 확인하고 그 위에 새로운 페이지를 push
               }),
           ElevatedButton(
-              child: Text('실시간 탐지'),
+              child: Text('실시간 탐지g'),
               onPressed: () {
                 Navigator.push(
                     context, MaterialPageRoute(builder: (_) => HomePage()));
