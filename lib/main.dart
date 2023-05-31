@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-//////
+
 class StartPage extends StatefulWidget {
   const StartPage({Key? key}) : super(key: key);
 
