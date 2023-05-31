@@ -20,6 +20,7 @@ import 'State_Checkpage.dart';
 import 'animal_serving.dart';
 import 'animal_serving_service.dart';
 import 'Streamingpage.dart';
+
 // void main() {
 //   runApp(const MyApp());
 // }
@@ -60,7 +61,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 class StartPage extends StatefulWidget {
   const StartPage({Key? key}) : super(key: key);
 
@@ -73,7 +73,7 @@ class _StartPageState extends State<StartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('First pageee'),
+        title: Text('First page'),
       ),
       body: Center(
           child: Column(
@@ -97,10 +97,10 @@ class _StartPageState extends State<StartPage> {
                 //context: context가 가지고 있는 위젯트리의 위치 정보에 근거하여 현재 화면상에 보이는 페이지 위치를 확인하고 그 위에 새로운 페이지를 push
               }),
           ElevatedButton(
-              child: Text('실시간 탐지g'),
+              child: Text('실시간 탐지'),
               onPressed: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => StreamingPage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => StreamingPage()));
               }),
           ElevatedButton(
               child: Text('배식 / 건강상태'),
