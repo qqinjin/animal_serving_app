@@ -1,8 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart'; // date_symbol_data_local import
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class StreamingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    tz.initializeTimeZones();
+    tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
+    
+    initializeDateFormatting('ko_KR', null); // 한국 시간대(KST) 설정
+    DateTime currentDateTime = tz.TZDateTime.now(tz.local);
+    String formattedDate =
+        DateFormat('yyyy.MM.dd  HH:mm').format(currentDateTime.toLocal());
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 186, 181, 244),
@@ -14,7 +26,7 @@ class StreamingPage extends StatelessWidget {
           Padding(
             padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
             child: Text(
-              '2023.05.29 : 오후 3:43:05',
+              formattedDate,
               style: TextStyle(fontSize: 18.0),
             ),
           ),
@@ -24,7 +36,6 @@ class StreamingPage extends StatelessWidget {
             indent: 3.0,
             endIndent: 3.0,
           ),
-          
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'HealthPage.dart';
 import 'DistributePage.dart';
+
 class PetDetailPage extends StatelessWidget {
   final String petName;
 
@@ -25,7 +26,7 @@ class PetDetailPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => DistributePage(),
+                    builder: (context) => DistributePage(petName: petName),
                   ),
                 );
               },
@@ -46,7 +47,7 @@ class PetDetailPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => HealthPage(),
+                    builder: (context) => HealthPage(petName: petName),
                   ),
                 );
               },
