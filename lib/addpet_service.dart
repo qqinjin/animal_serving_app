@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 
 class AddPetService extends ChangeNotifier {
   final addpetCollection = FirebaseFirestore.instance.collection('pet');
+  //final HealthCollection = FirebaseFirestore.instance.collection('health');
+
+// **pet 컬렉션 내의 health 컬렉션을 불러옵니다
+//**final healthCollection = petCollection.doc('petDocumentID').collection('health');
 
   Future<QuerySnapshot> read(String uid) async {
     // 내 bucketList 가져오기
