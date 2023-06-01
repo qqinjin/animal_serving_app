@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Firestore import
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+
+import 'auth_service.dart';
+import 'bucket_service.dart';
+import 'loginpage.dart';
 
 class DistributePage extends StatefulWidget {
+  @override
   final String petName;
 
   DistributePage({required this.petName});
@@ -12,19 +20,97 @@ class DistributePage extends StatefulWidget {
 
 class _DistributePage extends State<DistributePage> {
   DateTime? _selectedDay;
+  Map<DateTime, String> feedingDate = {};
   final String petName;
 
   _DistributePage({required this.petName});
 
+  @override
+  void initState() {
+    super.initState();
+
+    _selectedDay = DateTime.now();
+    // 데이터 가져오기
+    fetchData();
+  }
+
+  void fetchData() async {
+    // 현재 로그인된 사용자의 uid 가져오기 (로그인 기능이 구현되어 있다고 가정)
+    final user = context.read<AuthService>().currentUser();
+    final uid = user?.uid;
+
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('pet')
+        .where('uid', isEqualTo: uid)
+        .where('petname', isEqualTo: petName)
+        .get();
+
+   
+    
+    if (querySnapshot.docs.isNotEmpty) {
+
+      
+      final petDoc = querySnapshot.docs.first;
+      
+      final recordSnapshot = await FirebaseFirestore.instance
+          .collection('pet')
+          .doc(petDoc.id)
+          .collection('record')
+          .get();
+
+      
+      //test2 = remainingFoodDate;
+
+      recordSnapshot.docs.forEach((recordDoc) {
+
+        
+        final remainingFoodData =
+            recordDoc.data()['남은배식량'] as Map<String, dynamic>;
+        final remainingFoodDate =
+            (remainingFoodData['date'] as Timestamp).toDate();
+        final remainingFoodWeight = remainingFoodData['weight'] as String;
+
+        final feedingAmountData =
+            recordDoc.data()['배식량'] as Map<String, dynamic>;
+        final feedingAmountDate =
+            (feedingAmountData['date'] as Timestamp).toDate();
+        final feedingAmountWeight = feedingAmountData['weight'] as String;
+
+        // selected date comparison
+        final selectedDateWithoutTime = DateTime(
+            _selectedDay!.year, _selectedDay!.month, _selectedDay!.day);
+        
+        final remainingFoodDateWithoutTime = DateTime(remainingFoodDate.year,
+            remainingFoodDate.month, remainingFoodDate.day);
+      
+        
+        if (selectedDateWithoutTime == remainingFoodDateWithoutTime) {
+          feedingDate[_selectedDay!.toLocal()] =
+              'Remaining Food - Date: $remainingFoodDate, Weight: $remainingFoodWeight\n' +
+              'Feeding Amount - Date: $feedingAmountDate, Weight: $feedingAmountWeight';
+        }
+      });
+      
+      
+      setState(
+          () {}); // Move setState() here to make sure UI updates happen after all the data has been fetched.
+    }
+  }
+
+
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     setState(() {
       _selectedDay =
-          DateTime(focusedDay.year, focusedDay.month, focusedDay.day);
+          DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
     });
+
+    // 데이터 다시 가져오기
+    fetchData();
   }
 
   @override
   Widget build(BuildContext context) {
+  
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 186, 181, 244),
@@ -51,47 +137,10 @@ class _DistributePage extends State<DistributePage> {
             child: Column(
               children: [
                 SizedBox(height: 16.0),
-                StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('pet')
-                      .doc(petName)
-                      .collection('record')
-                      .snapshots(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.hasError) {
-                      return Text('Something went wrong');
-                    }
-
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Text("Loading");
-                    }
-
-                    Map<DateTime, String> records = {};
-                    for (var doc in snapshot.data!.docs) {
-                      final recordData = doc.data() as Map<String, dynamic>;
-                      final recordDate =
-                          (recordData['date'] as Timestamp).toDate();
-                      final recordValue = recordData['value'].toString();
-
-                      // 날짜만 비교하기 위해 시간을 제거합니다.
-                      final dateOnly = DateTime(
-                          recordDate.year, recordDate.month, recordDate.day);
-
-                      if (isSameDay(_selectedDay, dateOnly)) {
-                        // 날짜가 선택된 날짜와 일치하면 기록을 맵에 추가합니다.
-                        records[dateOnly] = recordValue;
-                      }
-                    }
-
-                    return Text(records[_selectedDay ?? DateTime.now()] ??
-                        '배식 기록이 없습니다.');
-                  },
-                ),
                 TableCalendar(
                   calendarFormat: CalendarFormat.week,
                   startingDayOfWeek: StartingDayOfWeek.monday,
-                  focusedDay: DateTime.now(),
+                  focusedDay: _selectedDay ?? DateTime.now(),
                   selectedDayPredicate: (day) {
                     return isSameDay(_selectedDay, day);
                   },
@@ -128,6 +177,8 @@ class _DistributePage extends State<DistributePage> {
                   ),
                   onDaySelected: _onDaySelected,
                 ),
+                SizedBox(height: 40.0),
+                Text(feedingDate[_selectedDay] ?? '${_selectedDay}'),
               ],
             ),
           ),
