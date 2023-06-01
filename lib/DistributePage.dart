@@ -20,97 +20,87 @@ class DistributePage extends StatefulWidget {
 
 class _DistributePage extends State<DistributePage> {
   DateTime? _selectedDay;
+  String? selecteday;
+  String? RecordDate;
   Map<DateTime, String> feedingDate = {};
   final String petName;
 
+  String? test;
+  String? test2;
+  String? test4;
   _DistributePage({required this.petName});
 
+  
   @override
-  void initState() {
+  void initState(){
+
     super.initState();
 
-    _selectedDay = DateTime.now();
-    // 데이터 가져오기
     fetchData();
   }
 
-  void fetchData() async {
-    // 현재 로그인된 사용자의 uid 가져오기 (로그인 기능이 구현되어 있다고 가정)
-    final user = context.read<AuthService>().currentUser();
-    final uid = user?.uid;
+  Future<void> fetchData() async{
+      
+      final user = context.read<AuthService>().currentUser();
+      final uid = user?.uid;
 
-    final querySnapshot = await FirebaseFirestore.instance
+      final querySnapshot = await FirebaseFirestore.instance
         .collection('pet')
         .where('uid', isEqualTo: uid)
-        .where('petname', isEqualTo: petName)
+        .where('petname' , isEqualTo: petName)
         .get();
-
-   
-    
-    if (querySnapshot.docs.isNotEmpty) {
-
       
-      final petDoc = querySnapshot.docs.first;
-      
+      test = querySnapshot.docs.first.id;
+
+      final recordDoc = querySnapshot.docs.first.id;
+
       final recordSnapshot = await FirebaseFirestore.instance
           .collection('pet')
-          .doc(petDoc.id)
+          .doc(recordDoc)
           .collection('record')
           .get();
 
       
-      //test2 = remainingFoodDate;
+      test2 = recordSnapshot.docs.first.id;
 
-      recordSnapshot.docs.forEach((recordDoc) {
-
+      recordSnapshot.docs.forEach((Doc) {
         
-        final remainingFoodData =
-            recordDoc.data()['남은배식량'] as Map<String, dynamic>;
-        final remainingFoodDate =
-            (remainingFoodData['date'] as Timestamp).toDate();
+        final remainingFoodData = Doc.data()['남은배식량'] as Map<String, dynamic>;
+        final remainingFoodDate = (remainingFoodData['date'] as Timestamp).toDate();
         final remainingFoodWeight = remainingFoodData['weight'] as String;
 
-        final feedingAmountData =
-            recordDoc.data()['배식량'] as Map<String, dynamic>;
-        final feedingAmountDate =
-            (feedingAmountData['date'] as Timestamp).toDate();
+        final feedingAmountData = Doc.data()['배식량'] as Map<String, dynamic>;
+        final feedingAmountDate = (feedingAmountData['date'] as Timestamp).toDate();
         final feedingAmountWeight = feedingAmountData['weight'] as String;
 
-        // selected date comparison
-        final selectedDateWithoutTime = DateTime(
-            _selectedDay!.year, _selectedDay!.month, _selectedDay!.day);
-        
-        final remainingFoodDateWithoutTime = DateTime(remainingFoodDate.year,
-            remainingFoodDate.month, remainingFoodDate.day);
-      
-        
-        if (selectedDateWithoutTime == remainingFoodDateWithoutTime) {
-          feedingDate[_selectedDay!.toLocal()] =
-              'Remaining Food - Date: $remainingFoodDate, Weight: $remainingFoodWeight\n' +
-              'Feeding Amount - Date: $feedingAmountDate, Weight: $feedingAmountWeight';
-        }
-      });
-      
-      
-      setState(
-          () {}); // Move setState() here to make sure UI updates happen after all the data has been fetched.
-    }
-  }
+        final recordDate = feedingAmountDate.toString().split(' ')[0];
+        RecordDate = recordDate;
+        test4 = '${feedingAmountDate}';
 
+        if(selecteday == RecordDate) {
+          
+            feedingDate[_selectedDay!.toLocal()] = 
+              ' 남은 배식량 : $remainingFoodWeight \n' +
+              ' 배식한 날짜 : $feedingAmountDate, 배식량 : $feedingAmountWeight'; 
+        }
+
+      });
+
+      setState(() {});
+  }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     setState(() {
       _selectedDay =
           DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
+      selecteday =  _selectedDay.toString().split(' ')[0];
     });
 
-    // 데이터 다시 가져오기
     fetchData();
   }
 
   @override
   Widget build(BuildContext context) {
-  
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 186, 181, 244),
@@ -178,7 +168,7 @@ class _DistributePage extends State<DistributePage> {
                   onDaySelected: _onDaySelected,
                 ),
                 SizedBox(height: 40.0),
-                Text(feedingDate[_selectedDay] ?? '${_selectedDay}'),
+                Text(feedingDate[_selectedDay] ?? '배식기록이 없습니다.'),
               ],
             ),
           ),
