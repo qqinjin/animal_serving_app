@@ -20,6 +20,7 @@ import 'State_Checkpage.dart';
 import 'animal_serving.dart';
 import 'animal_serving_service.dart';
 import 'Streamingpage.dart';
+
 // void main() {
 //   runApp(const MyApp());
 // }
@@ -60,7 +61,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 class StartPage extends StatefulWidget {
   const StartPage({Key? key}) : super(key: key);
 
@@ -99,8 +99,8 @@ class _StartPageState extends State<StartPage> {
           ElevatedButton(
               child: Text('실시간 탐지'),
               onPressed: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => StreamingPage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => StreamingPage()));
               }),
           ElevatedButton(
               child: Text('배식 / 건강상태'),

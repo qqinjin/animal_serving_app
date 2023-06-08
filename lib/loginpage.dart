@@ -41,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
                 Center(
                   child: Text(
                     //"로그인해 주세요 🙂",
-                    user == null ? "로그인해 주세영 🙂" : "${user.email}님 안녕하세요 👋",
+                    user == null ? "로그인해 주세yo 🙂" : "${user.email}님 안녕하세요 👋",
                     style: TextStyle(
                       fontSize: 24,
                     ),
