@@ -1,9 +1,11 @@
 //import 'package:firebase_auth/firebase_auth.dart';
 
 //import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 //import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
 import 'auth_service.dart';
@@ -21,14 +23,26 @@ import 'animal_serving.dart';
 import 'animal_serving_service.dart';
 import 'Streamingpage.dart';
 
-// void main() {
-//   runApp(const MyApp());
-// }
+//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  var initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+  //var initializationSettingsIOS = IOSInitializationSettings();
+  var initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+    //iOS: initializationSettingsIOS,
+  );
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(
     MultiProvider(
       providers: [
@@ -69,6 +83,13 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPageState extends State<StartPage> {
+  Stream<QuerySnapshot> getPetStream() {
+    return FirebaseFirestore.instance
+        .collection('pet')
+        .where('animal_check', isEqualTo: '1')
+        .snapshots();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,7 +100,7 @@ class _StartPageState extends State<StartPage> {
           child: Column(
         children: [
           ElevatedButton(
-              child: Text('반려동물 추가gg'),
+              child: Text('반려동물 추가gh'),
               onPressed: () {
                 //Second page 불러오기
                 //Second page는 스택 상에서 이미 존재하는 First page위에 올라감

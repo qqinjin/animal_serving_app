@@ -6,7 +6,10 @@ import 'package:provider/provider.dart';
 import 'addpet_service.dart';
 import 'auth_service.dart';
 import 'loginpage.dart';
+//import 'notification.dart';
 //import 'main.dart';
+
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class AddPet extends StatefulWidget {
   const AddPet({Key? key}) : super(key: key);
@@ -17,6 +20,8 @@ class AddPet extends StatefulWidget {
 //final AddPetService addPetService = Provider.of<AddPetService>(context, listen: false);
 
 class _AddPetState extends State<AddPet> {
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
   TextEditingController petController = TextEditingController();
   TextEditingController breedController = TextEditingController(); //종
   TextEditingController nameController = TextEditingController(); //이름
@@ -180,6 +185,7 @@ class _AddPetState extends State<AddPet> {
                           weightController.clear();
                           nameController.clear();
                         }
+                        //FlutterLocalNotification.showNotification();
                       },
                     ),
                   ],

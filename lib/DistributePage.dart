@@ -45,25 +45,18 @@ class _DistributePage extends State<DistributePage> {
         .where('petname', isEqualTo: petName)
         .get();
 
-   
-    
     if (querySnapshot.docs.isNotEmpty) {
-
-      
       final petDoc = querySnapshot.docs.first;
-      
+
       final recordSnapshot = await FirebaseFirestore.instance
           .collection('pet')
           .doc(petDoc.id)
           .collection('record')
           .get();
 
-      
       //test2 = remainingFoodDate;
 
       recordSnapshot.docs.forEach((recordDoc) {
-
-        
         final remainingFoodData =
             recordDoc.data()['남은배식량'] as Map<String, dynamic>;
         final remainingFoodDate =
@@ -79,24 +72,21 @@ class _DistributePage extends State<DistributePage> {
         // selected date comparison
         final selectedDateWithoutTime = DateTime(
             _selectedDay!.year, _selectedDay!.month, _selectedDay!.day);
-        
+
         final remainingFoodDateWithoutTime = DateTime(remainingFoodDate.year,
             remainingFoodDate.month, remainingFoodDate.day);
-      
-        
+
         if (selectedDateWithoutTime == remainingFoodDateWithoutTime) {
           feedingDate[_selectedDay!.toLocal()] =
               'Remaining Food - Date: $remainingFoodDate, Weight: $remainingFoodWeight\n' +
-              'Feeding Amount - Date: $feedingAmountDate, Weight: $feedingAmountWeight';
+                  'Feeding Amount - Date: $feedingAmountDate, Weight: $feedingAmountWeight';
         }
       });
-      
-      
+
       setState(
           () {}); // Move setState() here to make sure UI updates happen after all the data has been fetched.
     }
   }
-
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     setState(() {
@@ -110,7 +100,6 @@ class _DistributePage extends State<DistributePage> {
 
   @override
   Widget build(BuildContext context) {
-  
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 186, 181, 244),
