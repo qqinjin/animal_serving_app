@@ -39,47 +39,47 @@ class _HealthPage extends State<HealthPage> {
   }
 
   Future<void> fetchData() async {
+    final user = context.read<AuthService>().currentUser();
+    final uid = user?.uid;
 
-      final user = context.read<AuthService>().currentUser();
-      final uid = user?.uid;
-
-      final querySnapshot = await FirebaseFirestore.instance
+    final querySnapshot = await FirebaseFirestore.instance
         .collection('pet')
         .where('uid', isEqualTo: uid)
         .where('petname', isEqualTo: petName)
         .get();
 
-      final healthDoc = querySnapshot.docs.first.id;
+    final healthDoc = querySnapshot.docs.first.id;
 
-      final healthSnapshot = await FirebaseFirestore.instance
+    final healthSnapshot = await FirebaseFirestore.instance
         .collection('pet')
         .doc(healthDoc)
         .collection('health')
         .get();
 
-      
-      healthSnapshot.docs.forEach((Doc){
-        
+    healthtext = {}; // healthtext 초기화
 
-        final healthDate = (Doc.get('date') as Timestamp).toDate().add(Duration(hours: 9));
-        final healthTemperature = Doc.get('temperature') as String;
-        final healthWeight = Doc.get('weight') as String;
+    healthSnapshot.docs.forEach((doc) {
+      final healthDate =
+          (doc.get('date') as Timestamp).toDate().add(Duration(hours: 9));
+      final healthTemperature = doc.get('temperature') as String;
+      final healthWeight = doc.get('weight') as String;
 
-        final healthData = healthDate.toString().split('')[0];
-        HealthDate = healthData;
+      // 선택된 날짜와 일치하는지 확인
+      if (_selectedDay != null &&
+          healthDate.year == _selectedDay!.year &&
+          healthDate.month == _selectedDay!.month &&
+          healthDate.day == _selectedDay!.day) {
+          healthtext[_selectedDay!.toLocal()] =
+            '측정날짜 : ${healthDate.year}-${healthDate.month}-${healthDate.day} \n' +
+                '$petName 의 무게 : $healthWeight \n' +
+                '$petName 의 체온 : $healthTemperature';
+      }
+    });
 
-        if(selecteday == HealthDate){
-
-            healthtext[_selectedDay!.toLocal()] =
-              '측정날짜 : $healthDate \n' +
-              '$petName 의 무게 : $healthWeight \n' +
-              '$petName 의 체온 : $healthTemperature';
-
-        }
-      });
-
-      setState(() {});
+    setState(() {});
   }
+
+
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
 

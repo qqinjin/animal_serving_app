@@ -24,10 +24,6 @@ class _DistributePage extends State<DistributePage> {
   String? RecordDate;
   Map<DateTime, String> feedingDate = {};
   final String petName;
-
-  String? test;
-  String? test2;
-  String? test4;
   _DistributePage({required this.petName});
 
   

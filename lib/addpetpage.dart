@@ -14,7 +14,6 @@ class AddPet extends StatefulWidget {
   @override
   State<AddPet> createState() => _AddPetState();
 }
-//final AddPetService addPetService = Provider.of<AddPetService>(context, listen: false);
 
 class _AddPetState extends State<AddPet> {
   TextEditingController petController = TextEditingController();
@@ -28,14 +27,13 @@ class _AddPetState extends State<AddPet> {
   Widget build(BuildContext context) {
     return Consumer<AddPetService>(
       builder: (context, addpetService, child) {
-        // ignore: unused_local_variable
         final authService = context.read<AuthService>();
-        // ignore: unused_local_variable
         final user = authService.currentUser()!;
 
         return Scaffold(
           appBar: AppBar(
-            title: Text("반려동물추가요"),
+            title: Text("반려동물추가"),
+            backgroundColor: Color.fromARGB(255, 186, 181, 244),
             actions: [
               TextButton(
                 child: Text(
@@ -70,8 +68,14 @@ class _AddPetState extends State<AddPet> {
                           Expanded(
                             child: TextField(
                               controller: breedController,
+                              cursorColor: Colors.deepPurple,
                               decoration: InputDecoration(
                                 hintText: '종',
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors
+                                          .deepPurple), // 커서를 올렸을 때 진한 보라색으로 변경
+                                ),
                               ),
                               onChanged: (value) {
                                 // 값이 변경되면 컨트롤러의 값도 업데이트
@@ -89,8 +93,14 @@ class _AddPetState extends State<AddPet> {
                           Expanded(
                             child: TextField(
                               controller: nameController,
+                              cursorColor: Colors.deepPurple,
                               decoration: InputDecoration(
                                 hintText: '이름',
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors
+                                          .deepPurple), // 커서를 올렸을 때 진한 보라색으로 변경
+                                ),
                               ),
                             ),
                           ),
@@ -104,9 +114,15 @@ class _AddPetState extends State<AddPet> {
                           Expanded(
                             child: TextField(
                               controller: ageController,
+                              cursorColor: Colors.deepPurple,
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                 hintText: '나이',
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors
+                                          .deepPurple), // 커서를 올렸을 때 진한 보라색으로 변경
+                                ),
                               ),
                             ),
                           ),
@@ -120,8 +136,14 @@ class _AddPetState extends State<AddPet> {
                           Expanded(
                             child: TextField(
                               controller: genderController,
+                              cursorColor: Colors.deepPurple,
                               decoration: InputDecoration(
                                 hintText: '성별',
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors
+                                          .deepPurple), // 커서를 올렸을 때 진한 보라색으로 변경
+                                ),
                               ),
                             ),
                           ),
@@ -135,9 +157,15 @@ class _AddPetState extends State<AddPet> {
                           Expanded(
                             child: TextField(
                               controller: weightController,
+                              cursorColor: Colors.deepPurple,
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                 hintText: '무게',
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors
+                                          .deepPurple), // 커서를 올렸을 때 진한 보라색으로 변경
+                                ),
                               ),
                             ),
                           ),
@@ -150,17 +178,14 @@ class _AddPetState extends State<AddPet> {
               Padding(
                 padding: const EdgeInsets.all(8),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Expanded(
-                    //   child: TextField(
-                    //     controller: petController,
-                    //     decoration: InputDecoration(
-                    //       hintText: "하고 싶은 일을 입력해주세요.",
-                    //     ),
-                    //   ),
-                    // ),
-                    ElevatedButton(
-                      child: Icon(Icons.add),
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        primary: Color.fromARGB(255, 186, 181, 244),
+                      ),
+                      icon: Icon(Icons.add),
+                      label: Text("추가"),
                       onPressed: () {
                         if (breedController.text.isNotEmpty &&
                             genderController.text.isNotEmpty &&
@@ -168,12 +193,13 @@ class _AddPetState extends State<AddPet> {
                             weightController.text.isNotEmpty &&
                             nameController.text.isNotEmpty) {
                           addpetService.create(
-                              breedController.text,
-                              nameController.text,
-                              ageController.text,
-                              weightController.text,
-                              genderController.text,
-                              user.uid);
+                            breedController.text,
+                            nameController.text,
+                            ageController.text,
+                            weightController.text,
+                            genderController.text,
+                            user.uid,
+                          );
                           breedController.clear();
                           genderController.clear();
                           ageController.clear();
