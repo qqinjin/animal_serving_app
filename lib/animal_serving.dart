@@ -8,6 +8,7 @@ import 'bucket_service.dart';
 import 'loginpage.dart';
 import 'addpetpage.dart';
 import 'animal_serving_service.dart';
+import 'DistributePage.dart';
 
 class HomePage2 extends StatefulWidget {
   const HomePage2({Key? key}) : super(key: key);
@@ -30,14 +31,14 @@ class _HomePageState extends State<HomePage2> {
   }
 
   Future<void> _getPetNamesFromFirestore() async {
-
     final user = context.read<AuthService>().currentUser();
     final uid = user?.uid;
 
     FirebaseFirestore.instance
         .collection('pet')
         .where('uid', isEqualTo: uid)
-        .get().then((QuerySnapshot querySnapshot) {
+        .get()
+        .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
         setState(() {
           petNames.add(doc.get('petname'));
@@ -57,6 +58,7 @@ class _HomePageState extends State<HomePage2> {
         return Scaffold(
           appBar: AppBar(
             title: Text("배식하기"),
+            backgroundColor: Color.fromARGB(255, 186, 181, 244),
             actions: [
               TextButton(
                 child: Text(
@@ -82,14 +84,19 @@ class _HomePageState extends State<HomePage2> {
               Padding(
                 padding: const EdgeInsets.all(8),
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10), // optional: to provide a bit of spacing
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 10), // optional: to provide a bit of spacing
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.deepPurpleAccent), // 색상은 원하는대로 변경 가능
-                    borderRadius: BorderRadius.circular(5), // optional: if you want rounded edges
+                    border: Border.all(
+                        color: Colors.deepPurpleAccent), // 색상은 원하는대로 변경 가능
+                    borderRadius: BorderRadius.circular(
+                        5), // optional: if you want rounded edges
                   ),
-                  child: DropdownButtonHideUnderline( // underline 제거
+                  child: DropdownButtonHideUnderline(
+                    // underline 제거
                     child: DropdownButton<String>(
-                      isExpanded: true, // dropdown button to occupy all available space
+                      isExpanded:
+                          true, // dropdown button to occupy all available space
                       value: dropdownValue,
                       icon: Icon(Icons.arrow_downward),
                       iconSize: 24,
@@ -131,11 +138,16 @@ class _HomePageState extends State<HomePage2> {
 
                     // 추가 버튼
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color.fromARGB(255, 186, 181, 244), // 변경된 색상
+                      ),
                       child: Text('주기'),
                       onPressed: () {
                         // create bucket
-                        if (jobController.text.isNotEmpty && dropdownValue != null) {
-                          animalServingService.create(jobController.text, dropdownValue!);
+                        if (jobController.text.isNotEmpty &&
+                            dropdownValue != null) {
+                          animalServingService.create(
+                              jobController.text, dropdownValue!);
                         }
                       },
                     ),
@@ -148,10 +160,17 @@ class _HomePageState extends State<HomePage2> {
                 padding: const EdgeInsets.all(8),
                 child: Center(
                   child: ElevatedButton(
-                    child: Text('건강상태 확인'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color.fromARGB(255, 186, 181, 244), // 변경된 색상
+                    ),
+                    child: Text('배식상황 확인'),
                     onPressed: () {
                       Navigator.push(
-                        context, MaterialPageRoute(builder: (context) => AddPet()),
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => 
+                            DistributePage(petName: dropdownValue!),
+                        ),
                       );
                     },
                   ),

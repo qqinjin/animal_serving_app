@@ -8,14 +8,14 @@ import 'auth_service.dart';
 import 'loginpage.dart';
 //import 'main.dart';
 
-class AddPet extends StatefulWidget {
-  const AddPet({Key? key}) : super(key: key);
+class Information extends StatefulWidget {
+  const Information({Key? key}) : super(key: key);
 
   @override
-  State<AddPet> createState() => _AddPetState();
+  State<Information> createState() => _Information();
 }
 
-class _AddPetState extends State<AddPet> {
+class _Information extends State<Information> {
   TextEditingController petController = TextEditingController();
   TextEditingController breedController = TextEditingController(); //종
   TextEditingController nameController = TextEditingController(); //이름

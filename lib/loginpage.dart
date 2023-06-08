@@ -1,4 +1,4 @@
-//import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +31,10 @@ class _LoginPageState extends State<LoginPage> {
         final user = authService.currentUser();
 
         return Scaffold(
-          appBar: AppBar(title: Text("로그인")),
+          appBar: AppBar(
+            title: Text("로그인"),
+            backgroundColor: Color.fromARGB(255, 186, 181, 244),
+          ),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -41,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
                 Center(
                   child: Text(
                     //"로그인해 주세요 🙂",
-                    user == null ? "로그인해 주세욥 🙂" : "${user.email}님 안녕하세요 👋",
+                    user == null ? "로그인 해주세요" : "${user.email}님 안녕하세요 👋",
                     style: TextStyle(
                       fontSize: 24,
                     ),
@@ -52,19 +55,42 @@ class _LoginPageState extends State<LoginPage> {
                 /// 이메일
                 TextField(
                   controller: emailController,
-                  decoration: InputDecoration(hintText: "이메일"),
+                  cursorColor: Colors.deepPurple, // 커서 색상
+                  decoration: InputDecoration(
+                    hintText: "이메일",
+                    hintStyle:
+                        TextStyle(color: Color.fromARGB(255, 189, 189, 204)),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Colors.deepPurple), // 커서를 올렸을 때의 밑줄 색상
+                    ),
+                  ),
                 ),
 
                 /// 비밀번호
                 TextField(
                   controller: passwordController,
-                  obscureText: false, // 비밀번호 안보이게
-                  decoration: InputDecoration(hintText: "비밀번호"),
+                  cursorColor: Colors.deepPurple, // 커서 색상
+                  obscureText: false,
+                  decoration: InputDecoration(
+                    hintText: "비밀번호",
+                    hintStyle:
+                        TextStyle(color: Color.fromARGB(255, 189, 189, 204)),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Colors.deepPurple), // 커서를 올렸을 때의 밑줄 색상
+                    ),
+                  ),
                 ),
+
                 SizedBox(height: 32),
 
                 /// 로그인 버튼
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        Color.fromARGB(255, 186, 181, 244), // 변경된 색상
+                  ),
                   child: Text("로그인", style: TextStyle(fontSize: 21)),
                   onPressed: () {
                     // 로그인
@@ -103,6 +129,10 @@ class _LoginPageState extends State<LoginPage> {
 
                 /// 회원가입 버튼
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        Color.fromARGB(255, 186, 181, 244), // 변경된 색상
+                  ),
                   child: Text("회원가입", style: TextStyle(fontSize: 21)),
                   onPressed: () {
                     // 회원가입
