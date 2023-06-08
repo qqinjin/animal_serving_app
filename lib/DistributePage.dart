@@ -49,9 +49,7 @@ class _DistributePage extends State<DistributePage> {
         .where('uid', isEqualTo: uid)
         .where('petname' , isEqualTo: petName)
         .get();
-      
-      test = querySnapshot.docs.first.id;
-
+    
       final recordDoc = querySnapshot.docs.first.id;
 
       final recordSnapshot = await FirebaseFirestore.instance
@@ -60,22 +58,19 @@ class _DistributePage extends State<DistributePage> {
           .collection('record')
           .get();
 
-      
-      test2 = recordSnapshot.docs.first.id;
 
       recordSnapshot.docs.forEach((Doc) {
         
         final remainingFoodData = Doc.data()['남은배식량'] as Map<String, dynamic>;
-        final remainingFoodDate = (remainingFoodData['date'] as Timestamp).toDate();
+        final remainingFoodDate = (remainingFoodData['date'] as Timestamp).toDate().add(Duration(hours: 9));
         final remainingFoodWeight = remainingFoodData['weight'] as String;
 
         final feedingAmountData = Doc.data()['배식량'] as Map<String, dynamic>;
-        final feedingAmountDate = (feedingAmountData['date'] as Timestamp).toDate();
+        final feedingAmountDate = (feedingAmountData['date'] as Timestamp).toDate().add(Duration(hours: 9));
         final feedingAmountWeight = feedingAmountData['weight'] as String;
 
         final recordDate = feedingAmountDate.toString().split(' ')[0];
         RecordDate = recordDate;
-        test4 = '${feedingAmountDate}';
 
         if(selecteday == RecordDate) {
           
