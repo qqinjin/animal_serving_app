@@ -1,82 +1,210 @@
-// ignore: unused_import
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class InformationService extends ChangeNotifier {
-  final InformationCollection = FirebaseFirestore.instance.collection('pet');
-  //final HealthCollection = FirebaseFirestore.instance.collection('health');
+import 'auth_service.dart';
+import 'bucket_service.dart';
+import 'information.dart';
+import 'loginpage.dart';
+import 'pet_state_detail.dart';
 
-// **pet 컬렉션 내의 health 컬렉션을 불러옵니다
-//**final healthCollection = petCollection.doc('petDocumentID').collection('health');
+/// 홈페이지
+class InformationService extends StatefulWidget {
+  const InformationService({Key? key}) : super(key: key);
 
-  Future<QuerySnapshot> read(String uid) async {
-    // 내 bucketList 가져오기
-    return InformationCollection.where('uid', isEqualTo: uid).get();
+  @override
+  State<InformationService> createState() => _InformationServiceState();
+}
+
+class _InformationServiceState extends State<InformationService> {
+  TextEditingController jobController = TextEditingController();
+  List<String> petNames = [];
+  String? selectedPetName;
+
+  @override
+  void initState() {
+    super.initState();
+    _getPetNamesFromFirestore();
   }
 
-  //final pid =
-  //final healthCollection = addpetCollection.where('uid', isEqualTo: uid).collection('health');
-//final healthCollection = addpetCollection.doc('pid').collection('health');
+  Future<void> _getPetNamesFromFirestore() async {
+    final user = context.read<AuthService>().currentUser();
+    final uid = user?.uid;
 
-//   void create(String job, String uid) async {
-// // bucket 만들기
+    FirebaseFirestore.instance
+        .collection('pet')
+        .where('uid', isEqualTo: uid)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        setState(() {
+          petNames.add(doc.get('petname') as String);
+        });
+      });
 
-//     await addpetCollection.add({
-//       'uid': uid, // 유저 식별자
-//       'job': job, // 하고싶은 일
-//       'isDone': false, // 완료 여부
-//     });
-//     notifyListeners(); // 화면 갱신
-//   }
-  void create(String petvalue, String petname, String petage, String petweight,
-      String petsex, String uid) async {
-// bucket 만들기
-
-    final petDocument = await InformationCollection.add({
-      'petvalue': petvalue, // 유저 식별자
-      'petname': petname, // 하고싶은 일
-      'petage': petage, // 완료 여부
-      'petweight': petweight,
-      'petsex': petsex,
-      'uid': uid,
-      'animal_check': '0',
-      'food_gram': '0',
-      'food_check': '0'
+      if (petNames.isNotEmpty) {
+        setState(() {
+          selectedPetName = petNames.first;
+        });
+      }
     });
+  }
 
-    final healthCollection = petDocument.collection('health');
-    final recordCollection = petDocument.collection('record');
-    final date = Timestamp.now();
-    String mapweight = '첫생성!';
-
-    await healthCollection.add({
-      'date': date,
-      'temperature': mapweight,
-      'weight': mapweight,
+  void updateSelectedPet(String petName) {
+    setState(() {
+      selectedPetName = petName;
     });
-
-    final remainingFeedingMap = {
-      'date': date,
-      'weight': mapweight,
-    };
-
-    await recordCollection
-        .add({'남은배식량': remainingFeedingMap, '배식량': remainingFeedingMap});
-//, '배식량': remainingFeedingMap
-    notifyListeners(); // 화면 갱신
   }
 
-  void update(String docId, bool isDone) async {
-    // bucket isDone 업데이트
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<BucketService>(
+      builder: (context, bucketService, child) {
+        final authService = context.read<AuthService>();
+        final user = authService.currentUser()!;
 
-    await InformationCollection.doc(docId).update({'isDone': isDone});
-    notifyListeners(); // 화면 갱신
-  }
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Color.fromARGB(255, 186, 181, 244),
+            elevation: 0,
+            title: Text(
+              "정보 페이지",
+              style: TextStyle(
+                color: Color.fromARGB(255, 255, 255, 255),
+              ),
+            ),
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: const Color.fromARGB(255, 255, 255, 255),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            actions: [
+              TextButton(
+                child: Text(
+                  "로그아웃",
+                  style: TextStyle(
+                    color: const Color.fromARGB(255, 255, 255, 255),
+                  ),
+                ),
+                onPressed: () {
+                  // 로그아웃
+                  context.read<AuthService>().signOut();
 
-  void delete(String docId) async {
-    // bucket 삭제
+                  // 로그인 페이지로 이동
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
+                },
+              ),
+            ],
+          ),
+          body: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
+                child: Text(
+                  '사용자 UID: ${user?.uid}',
+                  style: TextStyle(fontSize: 18.0),
+                ),
+              ),
+              Divider(
+                thickness: 1.0,
+                color: Colors.grey[400],
+                indent: 3.0,
+                endIndent: 3.0,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                // child: Text(
+                //   '동물 이름: $petName',
+                //   style: TextStyle(fontSize: 18.0),
+                // ),
+              ),
+              Divider(
+                thickness: 1.0,
+                color: Colors.grey[400],
+                indent: 3.0,
+                endIndent: 3.0,
+              ),
+              SizedBox(height: 16.0),
+              Text(
+                '등록된 반려동물',
+                style: TextStyle(fontSize: 18.0),
+              ),
+              Divider(
+                thickness: 1.0,
+                color: Colors.grey[400],
+                indent: 16.0,
+                endIndent: 16.0,
+              ),
+              SizedBox(height: 8.0),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    for (String petName in petNames)
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            updateSelectedPet(petName);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: selectedPetName == petName
+                                ? Color.fromARGB(255, 186, 181, 244)
+                                : Colors.grey[300],
+                          ),
+                          child: Text(petName),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 16.0),
+              if (selectedPetName != null)
+                FutureBuilder<QuerySnapshot>(
+                  future: FirebaseFirestore.instance
+                      .collection('pet')
+                      .where('petname', isEqualTo: selectedPetName)
+                      .get(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
 
-    await InformationCollection.doc(docId).delete();
-    notifyListeners(); // 화면 갱신
+                    if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    }
+
+                    final doc = snapshot.data!.docs.first;
+                    final petage = doc.get('petage') as String;
+                    final petsex = doc.get('petsex') as String;
+                    final uid = doc.get('uid') as String;
+                    final petvalue = doc.get('petvalue') as String;
+                    final petweight = doc.get('petweight') as String;
+
+                    return Expanded(
+                      child: InformationPage(
+                        petName: selectedPetName!,
+                        petage: petage,
+                        petsex: petsex,
+                        uid: uid,
+                        petvalue: petvalue,
+                        petweight: petweight,
+                      ),
+                    );
+                  },
+                ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

@@ -19,16 +19,16 @@ class DistributePage extends StatefulWidget {
 
 class _DistributePage extends State<DistributePage> {
   DateTime? _selectedDay;
-  String? selecteday;
-  String? RecordDate;
-  Map<DateTime, String> feedingDate = {};
+  String? selectedDay;
+  String? recordDate;
+  List<String> feedingRecords = []; // 변경: 여러 배식 기록을 저장하기 위한 리스트
   final String petName;
+
   _DistributePage({required this.petName});
 
   @override
   void initState() {
     super.initState();
-
     fetchData();
   }
 
@@ -50,26 +50,28 @@ class _DistributePage extends State<DistributePage> {
         .collection('record')
         .get();
 
-    recordSnapshot.docs.forEach((Doc) {
-      final remainingFoodData = Doc.data()['남은배식량'] as Map<String, dynamic>;
+    feedingRecords.clear(); // 변경: 이전 기록을 초기화
+
+    recordSnapshot.docs.forEach((doc) {
+      final remainingFoodData = doc.data()['남은배식량'] as Map<String, dynamic>;
       final remainingFoodDate = (remainingFoodData['date'] as Timestamp)
           .toDate()
           .add(Duration(hours: 9));
       final remainingFoodWeight = remainingFoodData['weight'] as String;
 
-      final feedingAmountData = Doc.data()['배식량'] as Map<String, dynamic>;
+      final feedingAmountData = doc.data()['배식량'] as Map<String, dynamic>;
       final feedingAmountDate = (feedingAmountData['date'] as Timestamp)
           .toDate()
           .add(Duration(hours: 9));
       final feedingAmountWeight = feedingAmountData['weight'] as String;
 
       final recordDate = feedingAmountDate.toString().split(' ')[0];
-      RecordDate = recordDate;
+      this.recordDate = recordDate;
 
-      if (selecteday == RecordDate) {
-        feedingDate[_selectedDay!.toLocal()] =
-            ' 남은 배식량 : $remainingFoodWeight \n' +
-                ' 배식한 날짜 : $feedingAmountDate, 배식량 : $feedingAmountWeight';
+      if (selectedDay == recordDate) {
+        final record =
+            '남은 배식량: $remainingFoodWeight\n배식한 날짜: $feedingAmountDate, 배식량: $feedingAmountWeight';
+        feedingRecords.add(record); // 변경: 배식 기록을 리스트에 추가
       }
     });
 
@@ -80,7 +82,7 @@ class _DistributePage extends State<DistributePage> {
     setState(() {
       _selectedDay =
           DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
-      selecteday = _selectedDay.toString().split(' ')[0];
+      this.selectedDay = _selectedDay.toString().split(' ')[0];
     });
 
     fetchData();
@@ -92,7 +94,7 @@ class _DistributePage extends State<DistributePage> {
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 186, 181, 244),
         elevation: 0,
-        title: Text('${petName}의  배식'),
+        title: Text('${petName}의 배식'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,7 +157,19 @@ class _DistributePage extends State<DistributePage> {
                   onDaySelected: _onDaySelected,
                 ),
                 SizedBox(height: 40.0),
-                Text(feedingDate[_selectedDay] ?? '배식기록이 없습니다.'),
+                Column(
+                  children: [
+                    for (int i = 0; i < feedingRecords.length; i++) ...[
+                      Divider(
+                        thickness: 1.0,
+                        color: Colors.grey[400],
+                        indent: 16.0,
+                        endIndent: 16.0,
+                      ),
+                      Text(feedingRecords[i]),
+                    ],
+                  ],
+                ),
               ],
             ),
           ),

@@ -1,3 +1,5 @@
+import 'package:bucket_list_with_firebase2/information.dart';
+import 'package:bucket_list_with_firebase2/information_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // Firebase Authentication 추가
 import 'package:firebase_core/firebase_core.dart';
@@ -163,7 +165,7 @@ class _StartPageState extends State<StartPage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => HomePage()),
+                  MaterialPageRoute(builder: (_) => InformationService()),
                 );
               },
             ),
