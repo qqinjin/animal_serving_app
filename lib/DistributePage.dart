@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
@@ -26,65 +25,64 @@ class _DistributePage extends State<DistributePage> {
   final String petName;
   _DistributePage({required this.petName});
 
-  
   @override
-  void initState(){
-
+  void initState() {
     super.initState();
 
     fetchData();
   }
 
-  Future<void> fetchData() async{
-      
-      final user = context.read<AuthService>().currentUser();
-      final uid = user?.uid;
+  Future<void> fetchData() async {
+    final user = context.read<AuthService>().currentUser();
+    final uid = user?.uid;
 
-      final querySnapshot = await FirebaseFirestore.instance
+    final querySnapshot = await FirebaseFirestore.instance
         .collection('pet')
         .where('uid', isEqualTo: uid)
-        .where('petname' , isEqualTo: petName)
+        .where('petname', isEqualTo: petName)
         .get();
-    
-      final recordDoc = querySnapshot.docs.first.id;
 
-      final recordSnapshot = await FirebaseFirestore.instance
-          .collection('pet')
-          .doc(recordDoc)
-          .collection('record')
-          .get();
+    final recordDoc = querySnapshot.docs.first.id;
 
+    final recordSnapshot = await FirebaseFirestore.instance
+        .collection('pet')
+        .doc(recordDoc)
+        .collection('record')
+        .get();
 
-      recordSnapshot.docs.forEach((Doc) {
-        
-        final remainingFoodData = Doc.data()['남은배식량'] as Map<String, dynamic>;
-        final remainingFoodDate = (remainingFoodData['date'] as Timestamp).toDate().add(Duration(hours: 9));
-        final remainingFoodWeight = remainingFoodData['weight'] as String;
+    recordSnapshot.docs.forEach((Doc) {
+      
+      final remainingFoodData = Doc.data()['남은배식량'] as Map<String, dynamic>;
+      final remainingFoodDate = (remainingFoodData['date'] as Timestamp)
+          .toDate()
+          .add(Duration(hours: 9));
+      final remainingFoodWeight = remainingFoodData['weight'] as String;
 
-        final feedingAmountData = Doc.data()['배식량'] as Map<String, dynamic>;
-        final feedingAmountDate = (feedingAmountData['date'] as Timestamp).toDate().add(Duration(hours: 9));
-        final feedingAmountWeight = feedingAmountData['weight'] as String;
+      final feedingAmountData = Doc.data()['배식량'] as Map<String, dynamic>;
+      final feedingAmountDate = (feedingAmountData['date'] as Timestamp)
+          .toDate()
+          .add(Duration(hours: 9));
+      final feedingAmountWeight = feedingAmountData['weight'] as String;
 
-        final recordDate = feedingAmountDate.toString().split(' ')[0];
-        RecordDate = recordDate;
+      final recordDate = feedingAmountDate.toString().split(' ')[0];
+      RecordDate = recordDate;
 
-        if(selecteday == RecordDate) {
-          
-            feedingDate[_selectedDay!.toLocal()] = 
-              ' 남은 배식량 : $remainingFoodWeight \n' +
-              ' 배식한 날짜 : $feedingAmountDate, 배식량 : $feedingAmountWeight'; 
-        }
+      if (selecteday == RecordDate) {
+        feedingDate[_selectedDay!.toLocal()] =
+            ' 남은 배식량 : $remainingFoodWeight \n' +
+            ' 배식한 날짜 : $feedingAmountDate \n' + 
+            ' 배식량 : $feedingAmountWeight';
+      }
+    });
 
-      });
-
-      setState(() {});
+    setState(() {});
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     setState(() {
       _selectedDay =
           DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
-      selecteday =  _selectedDay.toString().split(' ')[0];
+      selecteday = _selectedDay.toString().split(' ')[0];
     });
 
     fetchData();

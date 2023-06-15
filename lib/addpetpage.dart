@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'addpet_service.dart';
 import 'auth_service.dart';
 import 'loginpage.dart';
+import 'anumal_updatepage.dart';
+
 //import 'main.dart';
 
 class AddPet extends StatefulWidget {
