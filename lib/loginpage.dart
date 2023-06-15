@@ -34,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
           appBar: AppBar(
             title: Text("로그인"),
             backgroundColor: Color.fromARGB(255, 186, 181, 244),
-            ),
+          ),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -129,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 /// 회원가입 버튼
                 ElevatedButton(
-                   style: ElevatedButton.styleFrom(
+                  style: ElevatedButton.styleFrom(
                     backgroundColor:
                         Color.fromARGB(255, 186, 181, 244), // 변경된 색상
                   ),

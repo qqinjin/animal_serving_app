@@ -10,18 +10,15 @@ import 'bucket_service.dart';
 import 'loginpage.dart';
 
 class HealthPage extends StatefulWidget {
-
   @override
   final String petName;
 
   HealthPage({required this.petName});
 
   _HealthPage createState() => _HealthPage(petName: petName);
-
 }
 
 class _HealthPage extends State<HealthPage> {
-
   final String petName;
   _HealthPage({required this.petName});
 
@@ -31,8 +28,7 @@ class _HealthPage extends State<HealthPage> {
   Map<DateTime, String> healthtext = {};
 
   @override
-  void initState(){
-
+  void initState() {
     super.initState();
 
     fetchData();
@@ -69,7 +65,7 @@ class _HealthPage extends State<HealthPage> {
           healthDate.year == _selectedDay!.year &&
           healthDate.month == _selectedDay!.month &&
           healthDate.day == _selectedDay!.day) {
-          healthtext[_selectedDay!.toLocal()] =
+        healthtext[_selectedDay!.toLocal()] =
             '측정날짜 : ${healthDate.year}-${healthDate.month}-${healthDate.day} \n' +
                 '$petName 의 무게 : $healthWeight \n' +
                 '$petName 의 체온 : $healthTemperature';
@@ -79,15 +75,11 @@ class _HealthPage extends State<HealthPage> {
     setState(() {});
   }
 
-
-
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
+    setState(() {
+      _selectedDay =
+          DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
 
-    setState((){
-
-      _selectedDay = 
-        DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
-      
       selecteday = _selectedDay.toString().split('')[0];
     });
 
@@ -162,7 +154,26 @@ class _HealthPage extends State<HealthPage> {
                   onDaySelected: _onDaySelected,
                 ),
                 SizedBox(height: 40.0),
-                Text(healthtext[_selectedDay] ?? '측정기록이 없습니다.'),
+                Container(
+                  padding: EdgeInsets.all(16.0),
+                  child: Card(
+                    elevation: 4.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Text(
+                        healthtext[_selectedDay] ?? '측정기록이 없습니다.',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -171,4 +182,3 @@ class _HealthPage extends State<HealthPage> {
     );
   }
 }
-
