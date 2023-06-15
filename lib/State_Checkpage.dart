@@ -20,7 +20,6 @@ class Statepage extends StatefulWidget {
 }
 
 class _StatePageState extends State<Statepage> {
-  TextEditingController jobController = TextEditingController();
   List<String> petNames = [];
   String? petName;
 

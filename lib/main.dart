@@ -1,31 +1,22 @@
-//import 'package:firebase_auth/firebase_auth.dart';
-
-//import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-//import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'auth_service.dart';
 import 'bucket_service.dart';
 import 'addpet_service.dart';
-// ignore: unused_import
 import 'loginpage.dart';
-//import 'startpage.dart';
-
 import 'addpetpage.dart';
 import 'bucketlistpage.dart';
 import 'State_Checkpage.dart';
-
 import 'animal_serving.dart';
 import 'animal_serving_service.dart';
 import 'Streamingpage.dart';
-import "pet_state_detail.dart";
+import 'pet_state_detail.dart';
+import 'anumal_updatepage.dart';
 
-// void main() {
-//   runApp(const MyApp());
-// }
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -36,7 +27,6 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => AuthService()),
         ChangeNotifierProvider(create: (context) => BucketService()),
-        //ChangeNotifierProvider(create: (context) => StartPage()),
         ChangeNotifierProvider(create: (context) => AddPetService()),
         ChangeNotifierProvider(create: (context) => AnimalServingService()),
       ],
@@ -54,7 +44,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: unused_local_variable
     final user = context.read<AuthService>().currentUser();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -71,19 +60,15 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPageState extends State<StartPage> {
-  @override
-
   List<String> petNames = [];
   String? petName;
 
-   @override
+  @override
   void initState() {
     super.initState();
-    // 기본값 설정 (Firestore에서 첫 번째 데이터를 가져오거나, 고정된 값 설정)
     petName = '';
     _getPetNamesFromFirestore();
   }
-
 
   Future<void> _getPetNamesFromFirestore() async {
     final user = context.read<AuthService>().currentUser();
@@ -102,11 +87,58 @@ class _StartPageState extends State<StartPage> {
       });
     });
   }
-  
+
+  Future<void> _deletePetFromFirestore(String petName) async {
+    final user = context.read<AuthService>().currentUser();
+    final uid = user?.uid;
+
+    FirebaseFirestore.instance
+        .collection('pet')
+        .where('uid', isEqualTo: uid)
+        .where('petname', isEqualTo: petName)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        doc.reference.delete();
+        setState(() {
+          petNames.remove(petName);
+        });
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    User? currentUser = context.watch<AuthService>().currentUser();
+
+    Widget buildUserAvatar() {
+      return CircleAvatar(
+        child: Icon(Icons.person),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+      );
+    }
+
+    Widget buildUserHeader() {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          buildUserAvatar(),
+          SizedBox(height: 16.0),
+          Text(
+            currentUser?.email ?? '',
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.white,
+            ),
+          ),
+        ],
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('First page'),
+        title: Text('My Pet'),
         backgroundColor: Color.fromARGB(255, 186, 181, 244),
       ),
       drawer: Drawer(
@@ -117,22 +149,7 @@ class _StartPageState extends State<StartPage> {
               decoration: BoxDecoration(
                 color: Color.fromARGB(255, 186, 181, 244),
               ),
-              child: Text(
-                'Menu',
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            ListTile(
-              title: Text('반려동물 추가'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => AddPet()),
-                );
-              },
+              child: buildUserHeader(),
             ),
             ListTile(
               title: Text('실시간 탐지'),
@@ -140,15 +157,6 @@ class _StartPageState extends State<StartPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => StreamingPage()),
-                );
-              },
-            ),
-            ListTile(
-              title: Text('배식 / 건강상태'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => Statepage()),
                 );
               },
             ),
@@ -170,44 +178,124 @@ class _StartPageState extends State<StartPage> {
                 );
               },
             ),
+            ListTile(
+              title: Text('로그아웃'),
+              onTap: () {
+                context.read<AuthService>().signOut();
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              },
+            ),
           ],
         ),
       ),
-      
-      body: ListView.builder(
-        itemCount: petNames.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: EdgeInsets.symmetric(vertical: 3.0, horizontal: 3.0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        PetDetailPage(petName: petNames[index]),
-                  ),
-                );
-              },
-              child: Container(
-                height: 100, // 카드 높이 설정
-                child: Card(
-                  color: Colors.white, // 카드 배경색 설정
-                  elevation: 2, // 카드 그림자 설정
-                  child: ListTile(
-                    title: Text(
-                      '이름 : ${petNames[index]}',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Color.fromARGB(255, 65, 65, 65), // 텍스트 색상
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: petNames.length,
+              itemBuilder: (context, index) {
+                final petName = petNames[index];
+                return Padding(
+                  padding: EdgeInsets.symmetric(vertical: 3.0, horizontal: 3.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PetDetailPage(petName: petName),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: 100,
+                      child: Card(
+                        color: Colors.white,
+                        elevation: 2,
+                        child: ListTile(
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 16.0),
+                          leading: Icon(
+                            Icons.pets,
+                            size: 40,
+                            color: Color.fromARGB(255, 245, 179, 176),
+                          ),
+                          title: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              '$petName',
+                              style: TextStyle(
+                                fontSize: 17,
+                                color: Color.fromARGB(255, 65, 65, 65),
+                              ),
+                            ),
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize
+                                .min, // Row의 사이즈를 자식 위젯들의 사이즈에 맞게 최소화합니다.
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          PetEditPage(petName: petName),
+                                    ),
+                                  );
+                                },
+                                icon: Icon(
+                                  Icons.edit, // 이 부분은 원하는 아이콘으로 변경하실 수 있습니다.
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  _deletePetFromFirestore(petName);
+                                },
+                                icon: Icon(
+                                  Icons.delete, // 이 부분은 원하는 아이콘으로 변경하실 수 있습니다.
+                                  color: Color.fromARGB(255, 255, 18, 18),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
+                );
+              },
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => AddPet()),
+                );
+              },
+              icon: Icon(
+                Icons.add,
+                color: Color.fromARGB(255, 65, 65, 65),
+              ),
+              label: Text(
+                '등록',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 65, 65, 65),
                 ),
               ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+              ),
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }

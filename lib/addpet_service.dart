@@ -14,6 +14,10 @@ class AddPetService extends ChangeNotifier {
     return addpetCollection.where('uid', isEqualTo: uid).get();
   }
 
+  //final pid =
+  //final healthCollection = addpetCollection.where('uid', isEqualTo: uid).collection('health');
+//final healthCollection = addpetCollection.doc('pid').collection('health');
+
 //   void create(String job, String uid) async {
 // // bucket 만들기
 
@@ -28,15 +32,37 @@ class AddPetService extends ChangeNotifier {
       String petsex, String uid) async {
 // bucket 만들기
 
-    await addpetCollection.add({
+    final petDocument = await addpetCollection.add({
       'petvalue': petvalue, // 유저 식별자
       'petname': petname, // 하고싶은 일
       'petage': petage, // 완료 여부
       'petweight': petweight,
       'petsex': petsex,
-      'uid': uid
+      'uid': uid,
+      'animal_check': '0',
+      'food_gram': '0',
+      'food_check': '0'
     });
 
+    final healthCollection = petDocument.collection('health');
+    final recordCollection = petDocument.collection('record');
+    final date = Timestamp.now();
+    String mapweight = '첫생성!';
+
+    await healthCollection.add({
+      'date': date,
+      'temperature': mapweight,
+      'weight': mapweight,
+    });
+
+    final remainingFeedingMap = {
+      'date': date,
+      'weight': mapweight,
+    };
+
+    await recordCollection
+        .add({'남은배식량': remainingFeedingMap, '배식량': remainingFeedingMap});
+//, '배식량': remainingFeedingMap
     notifyListeners(); // 화면 갱신
   }
 
