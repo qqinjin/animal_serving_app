@@ -1,4 +1,3 @@
-//import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,8 +6,7 @@ import 'addpet_service.dart';
 import 'auth_service.dart';
 import 'loginpage.dart';
 import 'anumal_updatepage.dart';
-
-//import 'main.dart';
+import 'main.dart';
 
 class AddPet extends StatefulWidget {
   const AddPet({Key? key}) : super(key: key);
@@ -24,6 +22,55 @@ class _AddPetState extends State<AddPet> {
   TextEditingController ageController = TextEditingController(); // 나이
   TextEditingController genderController = TextEditingController(); //성별
   TextEditingController weightController = TextEditingController(); //체중
+
+  void showCompletionDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('알림'),
+          content: Text('반려동물 등록이 완료되었습니다'),
+          actions: <Widget>[
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Color.fromARGB(255, 186, 181, 244),
+              ),
+              child: Text('확인'),
+              onPressed: () {
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => StartPage()),
+                  (Route<dynamic> route) => false,
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showInputRequiredDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('알림'),
+          content: Text('모두 입력해주세요.'),
+          actions: <Widget>[
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Color.fromARGB(255, 186, 181, 244),
+              ),
+              child: Text('확인'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,12 +122,11 @@ class _AddPetState extends State<AddPet> {
                                 hintText: '종',
                                 focusedBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Colors
-                                          .deepPurple), // 커서를 올렸을 때 진한 보라색으로 변경
+                                    color: Colors.deepPurple,
+                                  ),
                                 ),
                               ),
                               onChanged: (value) {
-                                // 값이 변경되면 컨트롤러의 값도 업데이트
                                 breedController.text = value;
                               },
                             ),
@@ -100,8 +146,8 @@ class _AddPetState extends State<AddPet> {
                                 hintText: '이름',
                                 focusedBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Colors
-                                          .deepPurple), // 커서를 올렸을 때 진한 보라색으로 변경
+                                    color: Colors.deepPurple,
+                                  ),
                                 ),
                               ),
                             ),
@@ -122,8 +168,8 @@ class _AddPetState extends State<AddPet> {
                                 hintText: '나이',
                                 focusedBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Colors
-                                          .deepPurple), // 커서를 올렸을 때 진한 보라색으로 변경
+                                    color: Colors.deepPurple,
+                                  ),
                                 ),
                               ),
                             ),
@@ -143,8 +189,8 @@ class _AddPetState extends State<AddPet> {
                                 hintText: '성별',
                                 focusedBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Colors
-                                          .deepPurple), // 커서를 올렸을 때 진한 보라색으로 변경
+                                    color: Colors.deepPurple,
+                                  ),
                                 ),
                               ),
                             ),
@@ -165,8 +211,8 @@ class _AddPetState extends State<AddPet> {
                                 hintText: '무게',
                                 focusedBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Colors
-                                          .deepPurple), // 커서를 올렸을 때 진한 보라색으로 변경
+                                    color: Colors.deepPurple,
+                                  ),
                                 ),
                               ),
                             ),
@@ -207,6 +253,10 @@ class _AddPetState extends State<AddPet> {
                           ageController.clear();
                           weightController.clear();
                           nameController.clear();
+
+                          showCompletionDialog(); // Display completion dialog
+                        } else {
+                          showInputRequiredDialog(); // Display input required dialog
                         }
                       },
                     ),

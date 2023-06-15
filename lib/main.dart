@@ -1,7 +1,12 @@
+import 'package:bucket_list_with_firebase2/Messaging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import 'auth_service.dart';
@@ -22,6 +27,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(
     MultiProvider(
       providers: [
@@ -30,7 +36,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => AddPetService()),
         ChangeNotifierProvider(create: (context) => AnimalServingService()),
       ],
-      child: const MyApp(),
+      child: MyApp(),
     ),
   );
 }
@@ -40,7 +46,10 @@ class DefaultFirebaseOptions {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
+
+  final NotificationController notificationController =
+      Get.put(NotificationController());
 
   @override
   Widget build(BuildContext context) {
@@ -92,19 +101,48 @@ class _StartPageState extends State<StartPage> {
     final user = context.read<AuthService>().currentUser();
     final uid = user?.uid;
 
-    FirebaseFirestore.instance
-        .collection('pet')
-        .where('uid', isEqualTo: uid)
-        .where('petname', isEqualTo: petName)
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        doc.reference.delete();
-        setState(() {
-          petNames.remove(petName);
-        });
-      });
-    });
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('알림'),
+          content: Text('${petName} 등록을 취소합니다.'),
+          actions: <Widget>[
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Color.fromARGB(255, 186, 181, 244),
+              ),
+              child: Text('확인'),
+              onPressed: () {
+                FirebaseFirestore.instance
+                    .collection('pet')
+                    .where('uid', isEqualTo: uid)
+                    .where('petname', isEqualTo: petName)
+                    .get()
+                    .then((QuerySnapshot querySnapshot) {
+                  querySnapshot.docs.forEach((doc) {
+                    doc.reference.delete();
+                    setState(() {
+                      petNames.remove(petName);
+                    });
+                  });
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.grey,
+              ),
+              child: Text('취소'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -217,7 +255,9 @@ class _StartPageState extends State<StartPage> {
                         elevation: 2,
                         child: ListTile(
                           contentPadding: EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 16.0),
+                            vertical: 8.0,
+                            horizontal: 16.0,
+                          ),
                           leading: Icon(
                             Icons.pets,
                             size: 40,
@@ -234,8 +274,7 @@ class _StartPageState extends State<StartPage> {
                             ),
                           ),
                           trailing: Row(
-                            mainAxisSize: MainAxisSize
-                                .min, // Row의 사이즈를 자식 위젯들의 사이즈에 맞게 최소화합니다.
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               IconButton(
                                 onPressed: () {
@@ -248,7 +287,7 @@ class _StartPageState extends State<StartPage> {
                                   );
                                 },
                                 icon: Icon(
-                                  Icons.edit, // 이 부분은 원하는 아이콘으로 변경하실 수 있습니다.
+                                  Icons.edit,
                                   color: Colors.grey,
                                 ),
                               ),
@@ -257,7 +296,7 @@ class _StartPageState extends State<StartPage> {
                                   _deletePetFromFirestore(petName);
                                 },
                                 icon: Icon(
-                                  Icons.delete, // 이 부분은 원하는 아이콘으로 변경하실 수 있습니다.
+                                  Icons.delete,
                                   color: Color.fromARGB(255, 255, 18, 18),
                                 ),
                               ),

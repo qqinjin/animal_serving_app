@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart'; // add this import for date formatting
 import 'package:provider/provider.dart';
 
 import 'auth_service.dart';
@@ -51,7 +52,6 @@ class _DistributePage extends State<DistributePage> {
         .get();
 
     recordSnapshot.docs.forEach((Doc) {
-      
       final remainingFoodData = Doc.data()['남은배식량'] as Map<String, dynamic>;
       final remainingFoodDate = (remainingFoodData['date'] as Timestamp)
           .toDate()
@@ -64,14 +64,14 @@ class _DistributePage extends State<DistributePage> {
           .add(Duration(hours: 9));
       final feedingAmountWeight = feedingAmountData['weight'] as String;
 
-      final recordDate = feedingAmountDate.toString().split(' ')[0];
+      final recordDate = DateFormat('yyyy-MM-dd')
+          .format(feedingAmountDate); // Use the DateFormat class here
       RecordDate = recordDate;
 
       if (selecteday == RecordDate) {
-        feedingDate[_selectedDay!.toLocal()] =
-            ' 남은 배식량 : $remainingFoodWeight \n' +
-            ' 배식한 날짜 : $feedingAmountDate \n' + 
-            ' 배식량 : $feedingAmountWeight';
+        feedingDate[_selectedDay!.toLocal()] = ' 남은 배식량: $remainingFoodWeight g\n' +
+            ' 배식한 날짜: ${DateFormat('yyyy-MM-dd HH:mm').format(feedingAmountDate)}\n' + // Here as well
+            ' 배식량: $feedingAmountWeight g';
       }
     });
 
@@ -94,7 +94,7 @@ class _DistributePage extends State<DistributePage> {
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 186, 181, 244),
         elevation: 0,
-        title: Text('${petName}의  배식'),
+        title: Text('${petName}의 배식'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,7 +157,13 @@ class _DistributePage extends State<DistributePage> {
                   onDaySelected: _onDaySelected,
                 ),
                 SizedBox(height: 40.0),
-                Text(feedingDate[_selectedDay] ?? '배식기록이 없습니다.'),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    feedingDate[_selectedDay] ?? '배식기록이 없습니다.',
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                ),
               ],
             ),
           ),

@@ -19,13 +19,12 @@ class HomePage2 extends StatefulWidget {
 
 class _HomePageState extends State<HomePage2> {
   TextEditingController jobController = TextEditingController();
-  String? dropdownValue; // DropdownButton에서 선택한 값을 저장하는 변수
-  List<String> petNames = []; // Firestore에서 가져온 petname을 저장하는 리스트
+  String? dropdownValue;
+  List<String> petNames = [];
 
   @override
   void initState() {
     super.initState();
-    // 기본값 설정 (Firestore에서 첫 번째 데이터를 가져오거나, 고정된 값 설정)
     dropdownValue = '';
     _getPetNamesFromFirestore();
   }
@@ -46,6 +45,26 @@ class _HomePageState extends State<HomePage2> {
         });
       });
     });
+  }
+
+  showCompletionDialog(String petName, String jobAmount) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('알림'),
+          content: Text('$petName에게 ${jobAmount}g 배식하였습니다.'),
+          actions: <Widget>[
+            ElevatedButton(
+              child: Text('확인'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -80,23 +99,17 @@ class _HomePageState extends State<HomePage2> {
           ),
           body: Column(
             children: [
-              // DropdownButton 추가
               Padding(
                 padding: const EdgeInsets.all(8),
                 child: Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 10), // optional: to provide a bit of spacing
+                  padding: EdgeInsets.symmetric(horizontal: 10),
                   decoration: BoxDecoration(
-                    border: Border.all(
-                        color: Colors.deepPurpleAccent), // 색상은 원하는대로 변경 가능
-                    borderRadius: BorderRadius.circular(
-                        5), // optional: if you want rounded edges
+                    border: Border.all(color: Colors.deepPurpleAccent),
+                    borderRadius: BorderRadius.circular(5),
                   ),
                   child: DropdownButtonHideUnderline(
-                    // underline 제거
                     child: DropdownButton<String>(
-                      isExpanded:
-                          true, // dropdown button to occupy all available space
+                      isExpanded: true,
                       value: dropdownValue,
                       icon: Icon(Icons.arrow_downward),
                       iconSize: 24,
@@ -118,36 +131,37 @@ class _HomePageState extends State<HomePage2> {
                   ),
                 ),
               ),
-              // ... (other widgets)
-              // 입력창
               Divider(height: 3),
-
               Padding(
                 padding: const EdgeInsets.all(8),
                 child: Row(
                   children: [
-                    // 텍스트 입력창
                     Expanded(
                       child: TextField(
                         controller: jobController,
+                        cursorColor: Colors.deepPurple, // Set cursor color
                         decoration: InputDecoration(
                           hintText: "배식 g 입력",
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color:
+                                    Colors.deepPurple), // Set underline color
+                          ),
                         ),
                       ),
                     ),
-
-                    // 추가 버튼
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 186, 181, 244), // 변경된 색상
+                        backgroundColor: Color.fromARGB(255, 186, 181, 244),
                       ),
                       child: Text('주기'),
                       onPressed: () {
-                        // create bucket
                         if (jobController.text.isNotEmpty &&
                             dropdownValue != null) {
+                          final jobAmount = jobController.text;
                           animalServingService.create(
-                              jobController.text, dropdownValue!);
+                              jobAmount, dropdownValue!);
+                          showCompletionDialog(dropdownValue!, jobAmount);
                         }
                       },
                     ),
@@ -155,21 +169,20 @@ class _HomePageState extends State<HomePage2> {
                 ),
               ),
               Divider(height: 3),
-
               Padding(
                 padding: const EdgeInsets.all(8),
                 child: Center(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(255, 186, 181, 244), // 변경된 색상
+                      backgroundColor: Color.fromARGB(255, 186, 181, 244),
                     ),
                     child: Text('배식상황 확인'),
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => 
-                            DistributePage(petName: dropdownValue!),
+                          builder: (context) =>
+                              DistributePage(petName: dropdownValue!),
                         ),
                       );
                     },
