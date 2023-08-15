@@ -56,7 +56,7 @@ class _HealthPage extends State<HealthPage> {
 
     healthSnapshot.docs.forEach((doc) {
       final healthDate =
-          (doc.get('date') as Timestamp).toDate().add(Duration(hours: 9));
+          (doc.get('date') as Timestamp).toDate();
       final healthTemperature = doc.get('temperature') as String;
       final healthWeight = doc.get('weight') as String;
 

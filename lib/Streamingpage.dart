@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_mjpeg/flutter_mjpeg.dart';
 import 'package:intl/intl.dart';
@@ -9,6 +10,30 @@ class StreamingPage extends StatefulWidget {
 
 class _StreamingPageState extends State<StreamingPage> {
   final url = 'http://192.168.178.31:8081/';
+  String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  String formattedTime = DateFormat('hh:mm:ss').format(DateTime.now());
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(Duration(seconds: 1), (Timer t) => _getTime());
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  void _getTime() {
+    final String updatedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    final String updatedTime = DateFormat('hh:mm:ss').format(DateTime.now());
+    setState(() {
+      formattedDate = updatedDate;
+      formattedTime = updatedTime;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +58,7 @@ class _StreamingPageState extends State<StreamingPage> {
             ),
             SizedBox(height: 8),
             Text(
-              DateFormat('yyyy-MM-dd').format(DateTime.now()),
+              formattedDate,
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.black54,
@@ -50,7 +75,7 @@ class _StreamingPageState extends State<StreamingPage> {
             ),
             SizedBox(height: 8),
             Text(
-              DateFormat('hh:mm:ss').format(DateTime.now()),
+              formattedTime,
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.black54,

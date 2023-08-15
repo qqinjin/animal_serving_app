@@ -55,14 +55,12 @@ class _DistributePage extends State<DistributePage> {
     recordSnapshot.docs.forEach((doc) {
       final remainingFoodData = doc.data()['남은배식량'] as Map<String, dynamic>;
       final remainingFoodDate = (remainingFoodData['date'] as Timestamp)
-          .toDate()
-          .add(Duration(hours: 9));
+          .toDate();
       final remainingFoodWeight = remainingFoodData['weight'] as String;
 
       final feedingAmountData = doc.data()['배식량'] as Map<String, dynamic>;
       final feedingAmountDate = (feedingAmountData['date'] as Timestamp)
-          .toDate()
-          .add(Duration(hours: 9));
+          .toDate();
       final feedingAmountWeight = feedingAmountData['weight'] as String;
 
       final recordDate = feedingAmountDate.toString().split(' ')[0];

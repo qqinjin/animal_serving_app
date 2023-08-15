@@ -63,10 +63,15 @@ class AnimalServingService extends ChangeNotifier {
             'weight': '0',
           }
         });
+
+        // 찾은 문서의 'food_check' 필드를 1로 업데이트합니다.
+        await petRef.update({'food_check': "1", 'food_gram': foodGram});
       } else {
         // 일치하는 문서가 없으면 오류를 출력합니다.
         print("Error: No document found with pet name: $petName");
       }
+
+      
 
       notifyListeners(); // 화면 갱신
     } catch (e) {
@@ -74,4 +79,5 @@ class AnimalServingService extends ChangeNotifier {
       print(e);
     }
   }
+
 }

@@ -94,19 +94,6 @@ class InformationPage extends StatelessWidget {
             indent: 3.0,
             endIndent: 3.0,
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(
-              '동물uid: $uid',
-              style: TextStyle(fontSize: 18.0),
-            ),
-          ),
-          Divider(
-            thickness: 1.0,
-            color: Colors.grey[400],
-            indent: 3.0,
-            endIndent: 3.0,
-          ),
           SizedBox(height: 16.0),
         ],
       ),
