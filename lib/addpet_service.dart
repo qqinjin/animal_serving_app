@@ -47,6 +47,7 @@ class AddPetService extends ChangeNotifier {
     final healthCollection = petDocument.collection('health');
     final recordCollection = petDocument.collection('record');
     final date = Timestamp.now();
+
     String mapweight = '0';
 
     await healthCollection.add({

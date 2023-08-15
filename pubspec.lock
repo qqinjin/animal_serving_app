@@ -5,6 +5,7 @@ packages:
     dependency: transitive
     description:
       name: _flutterfire_internals
+<<<<<<< HEAD
       sha256: "9ebe81588e666f7e2b21309f2b5653bd9642d7f27fd0a6894278d2ff40cb9481"
       url: "https://pub.dev"
     source: hosted
@@ -17,6 +18,12 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.2"
+=======
+      sha256: a742f71d7f3484253a623b30e19256aa4668ecbb3de6ad1beb0bcf8d4777ecd8
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.3"
+>>>>>>> 73218a0b5d384e735ee82fcc889d8e3ec7afe72b
   async:
     dependency: transitive
     description:
@@ -216,31 +223,56 @@ packages:
       sha256: b12d23bb7c395a91038ce95183fe5feb4c0932134bc22e134e5deae5ad55afbd
       url: "https://pub.dev"
     source: hosted
+<<<<<<< HEAD
     version: "0.2.3+2"
+=======
+    version: "0.2.2+1"
+>>>>>>> 73218a0b5d384e735ee82fcc889d8e3ec7afe72b
   firebase_messaging:
     dependency: "direct main"
     description:
       name: firebase_messaging
+<<<<<<< HEAD
       sha256: a01d7b9eb43a4bad54a411edb2b4124089d88eab029191893e83c39e18ab19f7
       url: "https://pub.dev"
     source: hosted
     version: "14.6.2"
+=======
+      sha256: "77d93f897c893fa7c8de433f6950123bd9c56f27fd7f88a032a53102ca23fcee"
+      url: "https://pub.dev"
+    source: hosted
+    version: "14.6.3"
+>>>>>>> 73218a0b5d384e735ee82fcc889d8e3ec7afe72b
   firebase_messaging_platform_interface:
     dependency: transitive
     description:
       name: firebase_messaging_platform_interface
+<<<<<<< HEAD
       sha256: c2fef3e30fbfa3a71d74477df102d1c2f5aad860bb68bb4086b0af3b12abedf3
       url: "https://pub.dev"
     source: hosted
     version: "4.5.2"
+=======
+      sha256: e9e9dc48a3d8ffa67aaba3d6b1ebf74bc7d7d8c83d10b1458ff97878b9d8a2b0
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.5.3"
+>>>>>>> 73218a0b5d384e735ee82fcc889d8e3ec7afe72b
   firebase_messaging_web:
     dependency: transitive
     description:
       name: firebase_messaging_web
+<<<<<<< HEAD
       sha256: "8d280f0110ca4946b9863e578b9879874066ac486ffa596a609aab329fb6fa7e"
       url: "https://pub.dev"
     source: hosted
     version: "3.5.2"
+=======
+      sha256: "381f217e41e0e407baf8df21787b97e46fabfacefd6a953425be3a6cdf2269f4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.5.3"
+>>>>>>> 73218a0b5d384e735ee82fcc889d8e3ec7afe72b
   flutter:
     dependency: "direct main"
     description: flutter
@@ -274,6 +306,7 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_local_notifications
+<<<<<<< HEAD
       sha256: "812791d43ccfc1b443a0d39fa02a206fc228c597e28ff9337e09e3ca8d370391"
       url: "https://pub.dev"
     source: hosted
@@ -286,14 +319,27 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0+1"
+=======
+      sha256: "35071c2d5c2e039cfc4e52e5c4c4256b7eaae767fefd769895a1d2ae404e4e6f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "8.1.1+1"
+>>>>>>> 73218a0b5d384e735ee82fcc889d8e3ec7afe72b
   flutter_local_notifications_platform_interface:
     dependency: transitive
     description:
       name: flutter_local_notifications_platform_interface
+<<<<<<< HEAD
       sha256: "7cf643d6d5022f3baed0be777b0662cce5919c0a7b86e700299f22dc4ae660ef"
       url: "https://pub.dev"
     source: hosted
     version: "7.0.0+1"
+=======
+      sha256: "7744aad0b3637e6004929efe9ac2dfd3b878f4cecebfb1e9c2dfea5ac7d5c2e7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.1"
+>>>>>>> 73218a0b5d384e735ee82fcc889d8e3ec7afe72b
   flutter_mjpeg:
     dependency: "direct main"
     description:
@@ -689,10 +735,17 @@ packages:
     dependency: transitive
     description:
       name: webview_flutter_android
+<<<<<<< HEAD
       sha256: "532135f6f6b8030cd039f30eab23f340d650350e29f38e9b37d2eaad028f1018"
       url: "https://pub.dev"
     source: hosted
     version: "3.8.0"
+=======
+      sha256: "57a22c86065375c1598b57224f92d6008141be0c877c64100de8bfb6f71083d8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.7.1"
+>>>>>>> 73218a0b5d384e735ee82fcc889d8e3ec7afe72b
   webview_flutter_platform_interface:
     dependency: transitive
     description:
@@ -705,10 +758,17 @@ packages:
     dependency: transitive
     description:
       name: webview_flutter_wkwebview
+<<<<<<< HEAD
       sha256: ecc9e9ea15216afc5ba3b1f14aa19414ceba526e57b19cebd970bfa91a0f4058
       url: "https://pub.dev"
     source: hosted
     version: "3.5.0"
+=======
+      sha256: "6bbc6ade302b842999b27cbaa7171241c273deea8a9c73f92ceb3d811c767de2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.4.4"
+>>>>>>> 73218a0b5d384e735ee82fcc889d8e3ec7afe72b
   win32:
     dependency: transitive
     description:

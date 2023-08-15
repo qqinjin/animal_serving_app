@@ -10,6 +10,7 @@ class StreamingPage extends StatefulWidget {
 
 class _StreamingPageState extends State<StreamingPage> {
   final url = 'http://192.168.178.31:8081/';
+
   String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
   String formattedTime = DateFormat('hh:mm:ss').format(DateTime.now());
   Timer? _timer;
@@ -58,6 +59,7 @@ class _StreamingPageState extends State<StreamingPage> {
             ),
             SizedBox(height: 8),
             Text(
+
               formattedDate,
               style: TextStyle(
                 fontSize: 18,
@@ -75,6 +77,7 @@ class _StreamingPageState extends State<StreamingPage> {
             ),
             SizedBox(height: 8),
             Text(
+
               formattedTime,
               style: TextStyle(
                 fontSize: 18,

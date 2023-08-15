@@ -1,3 +1,4 @@
+
 import 'package:bucket_list_with_firebase2/Messaging.dart';
 import 'package:bucket_list_with_firebase2/information_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
@@ -144,6 +146,7 @@ class _StartPageState extends State<StartPage> {
         );
       },
     );
+
   }
 
   @override
@@ -228,6 +231,17 @@ class _StartPageState extends State<StartPage> {
                 );
               },
             ),
+            ListTile(
+              title: Text('로그아웃'),
+              onTap: () {
+                context.read<AuthService>().signOut();
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -256,9 +270,11 @@ class _StartPageState extends State<StartPage> {
                         elevation: 2,
                         child: ListTile(
                           contentPadding: EdgeInsets.symmetric(
+
                             vertical: 8.0,
                             horizontal: 16.0,
                           ),
+
                           leading: Icon(
                             Icons.pets,
                             size: 40,
@@ -275,7 +291,9 @@ class _StartPageState extends State<StartPage> {
                             ),
                           ),
                           trailing: Row(
+
                             mainAxisSize: MainAxisSize.min,
+
                             children: [
                               IconButton(
                                 onPressed: () {
@@ -288,7 +306,9 @@ class _StartPageState extends State<StartPage> {
                                   );
                                 },
                                 icon: Icon(
+
                                   Icons.edit,
+
                                   color: Colors.grey,
                                 ),
                               ),
@@ -298,6 +318,7 @@ class _StartPageState extends State<StartPage> {
                                 },
                                 icon: Icon(
                                   Icons.delete,
+
                                   color: Color.fromARGB(255, 255, 18, 18),
                                 ),
                               ),

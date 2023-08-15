@@ -50,6 +50,7 @@ class _DistributePage extends State<DistributePage> {
         .collection('record')
         .get();
 
+
     feedingRecords.clear(); // 변경: 이전 기록을 초기화
 
     recordSnapshot.docs.forEach((doc) {
@@ -83,12 +84,14 @@ class _DistributePage extends State<DistributePage> {
     final formattedTime =
         '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
     return '$formattedDate $formattedTime';
+
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     setState(() {
       _selectedDay =
           DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
+
       this.selectedDay = _selectedDay!.toString().split(' ')[0];
     });
 
