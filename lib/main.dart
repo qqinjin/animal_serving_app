@@ -231,17 +231,6 @@ class _StartPageState extends State<StartPage> {
                 );
               },
             ),
-            ListTile(
-              title: Text('로그아웃'),
-              onTap: () {
-                context.read<AuthService>().signOut();
-
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                );
-              },
-            ),
           ],
         ),
       ),
