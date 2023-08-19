@@ -137,10 +137,13 @@ class _StartPageState extends State<StartPage> {
           );
           break;
         case 3:
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => LoginPage()),
+          context.read<AuthService>().signOut();
+
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => LoginPage()),
+              (route) => false
           );
+
           break;
       }
     });
@@ -438,7 +441,7 @@ class _StartPageState extends State<StartPage> {
                       color: Color.fromARGB(255, 65, 65, 65),
                     ),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.white,
+                      backgroundColor: Colors.white,
                       padding: EdgeInsets.all(0),
                     ),
                   ),

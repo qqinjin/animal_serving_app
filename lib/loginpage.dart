@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'auth_service.dart';
 //import 'bucket_service.dart';
 import 'main.dart';
+import 'signupPage.dart';
 
 /// 로그인 페이지
 class LoginPage extends StatefulWidget {
@@ -31,54 +32,100 @@ class _LoginPageState extends State<LoginPage> {
         final user = authService.currentUser();
 
         return Scaffold(
-          appBar: AppBar(
-            title: Text("로그인"),
-            backgroundColor: Color.fromARGB(255, 186, 181, 244),
-          ),
+          
           body: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(50),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                /// 현재 유저 로그인 상태
-                Center(
-                  child: Text(
-                    //"로그인해 주세요 🙂",
-                    user == null ? "로그인 해주세요" : "${user.email}님 안녕하세요 👋",
-                    style: TextStyle(
-                      fontSize: 24,
-                    ),
+
+                SizedBox(height: 20),
+                Text(
+                  "Welcome,",
+                  style: TextStyle(
+                    fontSize: 25.0,
+                    color: Color.fromARGB(255, 0, 0, 0),
                   ),
                 ),
-                const SizedBox(height: 32),
+                Text(
+                  "Sign in to continue!",
+                  style: TextStyle(
+                    fontSize: 15.0,
+                    color: Color.fromARGB(255, 163, 163, 163),
+                  ),
+                ),               /// 현재 유저 로그인
+                SizedBox(height: 50),
 
-                /// 이메일
+                // 이메일 필드
+                Text(
+                  'id',
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.normal),
+                ),
+                SizedBox(height: 2),
                 TextField(
                   controller: emailController,
-                  cursorColor: Colors.deepPurple, // 커서 색상
+                  cursorColor: Color.fromARGB(255, 137, 137, 137),
                   decoration: InputDecoration(
-                    hintText: "이메일",
-                    hintStyle:
-                        TextStyle(color: Color.fromARGB(255, 189, 189, 204)),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Colors.deepPurple), // 커서를 올렸을 때의 밑줄 색상
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                    hintText: "email",
+                    hintStyle: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                      color: Color.fromARGB(255, 189, 189, 204),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide:
+                          BorderSide(color: Color.fromARGB(255, 195, 195, 195)),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide:
+                          BorderSide(color: Color.fromARGB(255, 195, 195, 195)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide:
+                          BorderSide(color: Color.fromARGB(255, 137, 137, 137)),
                     ),
                   ),
                 ),
 
-                /// 비밀번호
+                const SizedBox(height: 16),
+              // 비밀번호 필드
+                Text(
+                  'password',
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.normal),
+                ),
+                SizedBox(height: 2),
                 TextField(
                   controller: passwordController,
-                  cursorColor: Colors.deepPurple, // 커서 색상
-                  obscureText: false,
+                  cursorColor: Color.fromARGB(255, 137, 137, 137),
+                  obscureText: true, // 비밀번호를 숨기기 위해 true로 설정
                   decoration: InputDecoration(
-                    hintText: "비밀번호",
-                    hintStyle:
-                        TextStyle(color: Color.fromARGB(255, 189, 189, 204)),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Colors.deepPurple), // 커서를 올렸을 때의 밑줄 색상
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                    hintText: "password",
+                    hintStyle: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                      color: Color.fromARGB(255, 189, 189, 204),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide:
+                          BorderSide(color: Color.fromARGB(255, 195, 195, 195)),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide:
+                          BorderSide(color: Color.fromARGB(255, 195, 195, 195)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide:
+                          BorderSide(color: Color.fromARGB(255, 137, 137, 137)),
                     ),
                   ),
                 ),
@@ -86,74 +133,117 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 32),
 
                 /// 로그인 버튼
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        Color.fromARGB(255, 186, 181, 244), // 변경된 색상
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color.fromARGB(189, 255, 215, 238),  // 시작 색
+                        Color.fromARGB(136, 220, 180, 250), // 끝 색
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
-                  child: Text("로그인", style: TextStyle(fontSize: 21)),
-                  onPressed: () {
-                    // 로그인
-                    authService.signIn(
-                      email: emailController.text,
-                      password: passwordController.text,
-                      onSuccess: () {
-                        // 로그인 성공
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text("로그인 성공"),
-                        ));
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      ),
+                      backgroundColor: MaterialStateProperty.all(Colors.transparent),
+                      shadowColor: MaterialStateProperty.all(Colors.transparent),
+                      padding: MaterialStateProperty.all(EdgeInsets.all(15)),
+                      foregroundColor: MaterialStateProperty.all(Colors.white),
+                      overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                        (Set<MaterialState> states) {
+                          if (states.contains(MaterialState.pressed))
+                            return Color.fromARGB(255, 154, 100, 255).withOpacity(0.5);
+                          return null; 
+                        }
+                      ),
+                      elevation: MaterialStateProperty.all(0),
+                      side: MaterialStateProperty.all(BorderSide.none),
+                      textStyle: MaterialStateProperty.all<TextStyle>(
+                        TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
+                      ),
+                    ),
+                    child: Text("Login"),
+                    onPressed: () {
+                      // 로그인
+                      authService.signIn(
+                        email: emailController.text,
+                        password: passwordController.text,
+                        onSuccess: () {
+                          // 로그인 성공
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("로그인 성공"),
+                          ));
 
-                        // HomePage로 이동
-                        Navigator.pushReplacement(
+                          // HomePage로 이동
+                          Navigator.pushReplacement(
+                            context,
+                            //MaterialPageRoute(builder: (context) => HomePage()),
+                            MaterialPageRoute(builder: (context) => StartPage()),
+                          );
+                        },
+                        onError: (err) {
+                          // 에러 발생
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(err),
+                          ));
+
+                          // HomePage로 이동
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => StartPage()),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
+
+                SizedBox(height: 60),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center, // 중앙 정렬
+                  children: [
+                    Text(
+                      "Don't have an account? ",
+                      style: TextStyle(
+                        fontSize: 11.0,
+                        color: Color.fromARGB(255, 129, 129, 129),
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(width: 5), // 텍스트 사이의 간격을 주기 위한 SizedBox
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
                           context,
-                          //MaterialPageRoute(builder: (context) => HomePage()),
-                          MaterialPageRoute(builder: (context) => StartPage()),
+                          MaterialPageRoute(builder: (context) => SignUpPage()),
                         );
                       },
-                      onError: (err) {
-                        // 에러 발생
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(err),
-                        ));
-
-                        // HomePage로 이동
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => StartPage()),
-                        );
-                      },
-                    );
-                  },
+                      child: Text(
+                        "Sign UP",
+                        style: TextStyle(
+                          fontSize: 11.0,
+                          color: Color.fromARGB(255, 0, 0, 0),
+                        ),
+                      ),
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.transparent,
+                        padding: EdgeInsets.zero, // 패딩 제거
+                      ),
+                    )
+                  ],
                 ),
 
                 /// 회원가입 버튼
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        Color.fromARGB(255, 186, 181, 244), // 변경된 색상
-                  ),
-                  child: Text("회원가입", style: TextStyle(fontSize: 21)),
-                  onPressed: () {
-                    // 회원가입
-                    authService.signUp(
-                      email: emailController.text,
-                      password: passwordController.text,
-                      onSuccess: () {
-                        // 회원가입 성공
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text("회원가입 성공"),
-                        ));
-                      },
-                      onError: (err) {
-                        // 에러 발생
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(err),
-                        ));
-                      },
-                    );
-                  },
-                ),
+                
               ],
             ),
           ),
