@@ -11,7 +11,7 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 2;
   bool _isSwitched = false;
   bool _SMSswitched = false;
   bool _emailswitched = false;

@@ -7,6 +7,7 @@ import 'main.dart';
 import 'animal_serving.dart';
 import 'information_service.dart';
 import 'settingpage.dart';
+import 'infoChange.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
   final int currentIndex;
@@ -57,7 +58,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         case 3:
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => InformationService()),
+            MaterialPageRoute(builder: (_) => InfoChangePage()),
           );
           break;
       }
