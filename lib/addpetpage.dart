@@ -125,134 +125,137 @@ class _AddPetState extends State<AddPet> {
               ),
             ),
           ),
-          body: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.all(30.0),
-                child: Column(
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        _buildCustomDropdown(
-                          'species',
-                          breeds,
-                          selectedBreed,
-                          (value) {
-                            if (value == null) return;  
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(30.0),
+                  child: Column(
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          _buildCustomDropdown(
+                            'species',
+                            breeds,
+                            selectedBreed,
+                            (value) {
+                              if (value == null) return;
 
-                            setState(() {
-                              selectedBreed = value;
-                              breedController.text = value;
+                              setState(() {
+                                selectedBreed = value;
+                                breedController.text = value;
 
-                              if (value == 'etc.') {
-                                showBreedTextField = true;
-                              } else {
-                                showBreedTextField = false;
-                              }
-                            });
-                          },
-                        ),
-                        if (showBreedTextField) _buildCustomTextField('직접 입력해주세요', breedController),
-                        _buildCustomTextField('name', nameController),
-                        _buildCustomTextField('age', ageController),
-                        _buildCustomDropdown(
-                          'gender',
-                          genders,
-                          selectedGender,
-                          (value) {
-                            setState(() {
-                              selectedGender = value!;
-                              genderController.text = value;
-                            });
-                          },
-                        ),
-                        _buildCustomTextField('weight', weightController),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Color.fromARGB(189, 255, 215, 238), // 시작 색
-                            Color.fromARGB(136, 220, 180, 250), // 끝 색
-                          ],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
+                                if (value == 'etc.') {
+                                  showBreedTextField = true;
+                                } else {
+                                  showBreedTextField = false;
+                                }
+                              });
+                            },
+                          ),
+                          if (showBreedTextField)
+                            _buildCustomTextField('직접 입력해주세요', breedController),
+                          _buildCustomTextField('name', nameController),
+                          _buildCustomTextField('age', ageController),
+                          _buildCustomDropdown(
+                            'gender',
+                            genders,
+                            selectedGender,
+                            (value) {
+                              setState(() {
+                                selectedGender = value!;
+                                genderController.text = value;
+                              });
+                            },
+                          ),
+                          _buildCustomTextField('weight', weightController),
+                        ],
                       ),
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Color.fromARGB(189, 255, 215, 238), // 시작 색
+                              Color.fromARGB(136, 220, 180, 250), // 끝 색
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          ),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.transparent),
+                            shadowColor:
+                                MaterialStateProperty.all(Colors.transparent),
+                            padding:
+                                MaterialStateProperty.all(EdgeInsets.all(15)),
+                            foregroundColor:
+                                MaterialStateProperty.all(Colors.white),
+                            overlayColor:
+                                MaterialStateProperty.resolveWith<Color?>(
+                                    (Set<MaterialState> states) {
+                              if (states.contains(MaterialState.pressed))
+                                return Color.fromARGB(255, 154, 100, 255)
+                                    .withOpacity(0.5);
+                              return null;
+                            }),
+                            elevation: MaterialStateProperty.all(0),
+                            side: MaterialStateProperty.all(BorderSide.none),
+                            textStyle: MaterialStateProperty.all<TextStyle>(
+                              TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.normal),
                             ),
                           ),
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.transparent),
-                          shadowColor:
-                              MaterialStateProperty.all(Colors.transparent),
-                          padding:
-                              MaterialStateProperty.all(EdgeInsets.all(15)),
-                          foregroundColor:
-                              MaterialStateProperty.all(Colors.white),
-                          overlayColor:
-                              MaterialStateProperty.resolveWith<Color?>(
-                                  (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.pressed))
-                              return Color.fromARGB(255, 154, 100, 255)
-                                  .withOpacity(0.5);
-                            return null;
-                          }),
-                          elevation: MaterialStateProperty.all(0),
-                          side: MaterialStateProperty.all(BorderSide.none),
-                          textStyle: MaterialStateProperty.all<TextStyle>(
-                            TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.normal),
-                          ),
-                        ),
-                        child: Text("추가"),
-                        onPressed: () {
-                          if (selectedBreed != null &&
-                              selectedGender != null &&
-                              ageController.text.isNotEmpty &&
-                              weightController.text.isNotEmpty &&
-                              nameController.text.isNotEmpty) {
-                            addpetService.create(
-                              breedController.text,
-                              nameController.text,
-                              ageController.text,
-                              weightController.text,
-                              genderController.text,
-                              user.uid,
-                            );
-                            breedController.clear();
-                            genderController.clear();
-                            ageController.clear();
-                            weightController.clear();
-                            nameController.clear();
+                          child: Text("추가"),
+                          onPressed: () {
+                            if (selectedBreed != null &&
+                                selectedGender != null &&
+                                ageController.text.isNotEmpty &&
+                                weightController.text.isNotEmpty &&
+                                nameController.text.isNotEmpty) {
+                              addpetService.create(
+                                breedController.text,
+                                nameController.text,
+                                ageController.text,
+                                weightController.text,
+                                genderController.text,
+                                user.uid,
+                              );
+                              breedController.clear();
+                              genderController.clear();
+                              ageController.clear();
+                              weightController.clear();
+                              nameController.clear();
 
-                            showCompletionDialog(); // Display completion dialog
-                          } else {
-                            showInputRequiredDialog(); // Display input required dialog
-                          }
-                        },
+                              showCompletionDialog(); // Display completion dialog
+                            } else {
+                              showInputRequiredDialog(); // Display input required dialog
+                            }
+                          },
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -268,7 +271,7 @@ class _AddPetState extends State<AddPet> {
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
+            style: TextStyle(fontSize: 11, fontWeight: FontWeight.w400),
           ),
           SizedBox(height: 2),
           DropdownButtonFormField<String>(
@@ -276,17 +279,17 @@ class _AddPetState extends State<AddPet> {
             items: items.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: Text(value),
+                child: Text(value, style: TextStyle(fontSize: 11)),
               );
             }).toList(),
             hint: Text(
               label,
               style: TextStyle(
-                fontSize: 13,
+                fontSize: 11,
                 fontWeight: FontWeight.w400,
                 color: Color.fromARGB(255, 189, 189, 204),
               ),
-              ),
+            ),
             onChanged: onChanged,
             decoration: InputDecoration(
               contentPadding: EdgeInsets.all(10.0),
@@ -311,7 +314,6 @@ class _AddPetState extends State<AddPet> {
     );
   }
 
-
   Widget _buildCustomTextField(String label, TextEditingController controller) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -320,11 +322,12 @@ class _AddPetState extends State<AddPet> {
         children: <Widget>[
           Text(
             label,
-            style: TextStyle(fontSize: 13, fontWeight: FontWeight.normal),
+            style: TextStyle(fontSize: 11, fontWeight: FontWeight.normal),
           ),
           SizedBox(height: 2),
           TextFormField(
             controller: controller,
+            style: TextStyle(fontSize: 11),
             decoration: InputDecoration(
               contentPadding: EdgeInsets.all(10.0),
               border: OutlineInputBorder(

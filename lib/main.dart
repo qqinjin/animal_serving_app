@@ -397,7 +397,7 @@ class _StartPageState extends State<StartPage> {
     }
 
     return Scaffold(
-        appBar: PreferredSize(
+      appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: Container(
           decoration: BoxDecoration(
@@ -435,206 +435,212 @@ class _StartPageState extends State<StartPage> {
           ),
         ),
       ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(13.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    'My Pets',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Container(
-                    width: 30.0,
-                    height: 30.0,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => AddPet()),
-                        );
-                      },
-                      child: Icon(
-                        Icons.add,
-                        color: Color.fromARGB(255, 65, 65, 65),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        padding: EdgeInsets.all(0),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              height: size.height * 0.25,
-              child: PageView.builder(
-                controller: PageController(
-                  viewportFraction: boxWidthFraction,
-                  keepPage: false,
-                ),
-                itemCount: petNames.length,
-                itemBuilder: (context, index) {
-                  double iconHeight = boxHeight * 0.5;
-                  double smallBoxSize_w = boxHeight * 0.38; // 반려동물 3박스 사이즈
-                  double smallBoxSize_h = boxHeight * 0.275;
-
-                  return Padding(
-                    padding: EdgeInsets.only(
-                      left: (index == 0) ? width_margin : 0.0,
-                      right: width_margin / 2,
-                    ),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                HomePage2(petName: petNames[index]),
-                          ),
-                        );
-                      },
-                      child: Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.pets,
-                                    size: iconHeight,
-                                    color: Color.fromARGB(255, 245, 179, 176),
-                                  ),
-                                  SizedBox(width: 16),
-                                  Align(
-                                    alignment: Alignment.topCenter,
-                                    child: Text(
-                                      '${petNames[index]}',
-                                      style: TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 8),
-                              Row(
-                                children: [
-                                  smallBox(
-                                      'Gender',
-                                      petSexs[index],
-                                      '',
-                                      smallBoxSize_w,
-                                      smallBoxSize_h,
-                                      '80FF9900'), // 성별 표시,
-                                  SizedBox(width: 9),
-                                  smallBox(
-                                      'Ages',
-                                      petAges[index],
-                                      'Years',
-                                      smallBoxSize_w,
-                                      smallBoxSize_h,
-                                      '8099CCFF'), // 나이 표시
-                                  SizedBox(width: 9),
-                                  smallBox(
-                                      'Weight',
-                                      petWeights[index],
-                                      'Kg',
-                                      smallBoxSize_w,
-                                      smallBoxSize_h,
-                                      '8000FFCC'), // 무게 표시
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(13.0),
-              child: Align(
-                alignment: Alignment.centerLeft, // 왼쪽 정렬
-                child: Text(
-                  'Daily Tasks',
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(13.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  'My Pets',
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
-            ),
-            Container(
-              height: 100,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                controller: scrollController,
-                itemCount: datesOfCurrentMonth.length,
-                itemBuilder: (context, index) {
-                  DateTime date = datesOfCurrentMonth[index];
-                  return buildDateBox(date, index);
-                },
-              ),
-            ),
-            SizedBox(height: 16.0),
-            Expanded(
-              child: ListView.builder(
-                itemCount: petNames.length,
-                itemBuilder: (context, index) {
-                  String petName = petNames[index];
-                  double width_margin = MediaQuery.of(context).size.width * 0.05;
-
-                  return FutureBuilder<Map<String, dynamic>>(
-                    future: getTotalWeightForPet(petName),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator(); // 로딩 인디케이터
-                      } else if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
-                      } else {
-                        // 데이터베이스에서 가져온 텍스트
-                        double totalWeight = snapshot.data?['totalWeight'] ?? 0.0;
-                        int count = snapshot.data?['count'] ?? 0;
-                        String actionText = '$totalWeight' + 'g 배식';
-
-                        return Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: width_margin / 2,
-                            horizontal: width_margin / 2,
-                          ),
-                          child: buildPetActionBox(
-                              petName, Icons.pets, actionText, count),
-                        );
-                      }
+                Container(
+                  width: 30.0,
+                  height: 30.0,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => AddPet()),
+                      );
                     },
-                  );
-                },
+                    child: Icon(
+                      Icons.add,
+                      color: Color.fromARGB(255, 65, 65, 65),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      padding: EdgeInsets.all(0),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            height: size.height * 0.25,
+            child: PageView.builder(
+              controller: PageController(
+                viewportFraction: boxWidthFraction,
+                keepPage: false,
               ),
-            )
-          ],
-        ),
-      
-        bottomNavigationBar: CustomBottomNavigationBar(
-            currentIndex: _selectedIndex, 
-            parentContext: context,
-        ),
-      );
+              itemCount: petNames.length,
+              itemBuilder: (context, index) {
+                double iconHeight =
+                    MediaQuery.of(context).size.height * 0.05; // 수정됨
+                double smallBoxSize_w =
+                    MediaQuery.of(context).size.width * 0.1; // 수정됨
+                double smallBoxSize_h =
+                    MediaQuery.of(context).size.height * 0.07; // 수정됨
 
+                return Padding(
+                  padding: EdgeInsets.only(
+                    left: (index == 0) ? width_margin : 0.0,
+                    right: width_margin / 2,
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              HomePage2(petName: petNames[index]),
+                        ),
+                      );
+                    },
+                    child: Card(
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                FittedBox(
+                                  fit: BoxFit.fitWidth,
+                                  child: Icon(
+                                    Icons.pets,
+                                    size: iconHeight,
+                                    color: Color.fromARGB(255, 245, 179, 176),
+                                  ),
+                                ),
+                                SizedBox(width: 16),
+                                Flexible(
+                                  child: Text(
+                                    '${petNames[index]}',
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Expanded(
+                                    child: smallBox(
+                                        'Gender',
+                                        petSexs[index],
+                                        '',
+                                        smallBoxSize_w,
+                                        smallBoxSize_h,
+                                        '80FF9900')), // 성별 표시,
+                                SizedBox(width: 9),
+                                Expanded(
+                                    child: smallBox(
+                                        'Ages',
+                                        petAges[index],
+                                        'Years',
+                                        smallBoxSize_w,
+                                        smallBoxSize_h,
+                                        '8099CCFF')), // 나이 표시
+                                SizedBox(width: 9),
+                                Expanded(
+                                    child: smallBox(
+                                        'Weight',
+                                        petWeights[index],
+                                        'Kg',
+                                        smallBoxSize_w,
+                                        smallBoxSize_h,
+                                        '8000FFCC')), // 무게 표시
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(13.0),
+            child: Align(
+              alignment: Alignment.centerLeft, // 왼쪽 정렬
+              child: Text(
+                'Daily Tasks',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          Container(
+            height: 100,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              controller: scrollController,
+              itemCount: datesOfCurrentMonth.length,
+              itemBuilder: (context, index) {
+                DateTime date = datesOfCurrentMonth[index];
+                return buildDateBox(date, index);
+              },
+            ),
+          ),
+          SizedBox(height: 16.0),
+          Expanded(
+            child: ListView.builder(
+              itemCount: petNames.length,
+              itemBuilder: (context, index) {
+                String petName = petNames[index];
+                double width_margin = MediaQuery.of(context).size.width * 0.05;
+
+                return FutureBuilder<Map<String, dynamic>>(
+                  future: getTotalWeightForPet(petName),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator(); // 로딩 인디케이터
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      // 데이터베이스에서 가져온 텍스트
+                      double totalWeight = snapshot.data?['totalWeight'] ?? 0.0;
+                      int count = snapshot.data?['count'] ?? 0;
+                      String actionText = '$totalWeight' + 'g 배식';
+
+                      return Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: width_margin / 2,
+                          horizontal: width_margin / 2,
+                        ),
+                        child: buildPetActionBox(
+                            petName, Icons.pets, actionText, count),
+                      );
+                    }
+                  },
+                );
+              },
+            ),
+          )
+        ],
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: _selectedIndex,
+        parentContext: context,
+      ),
+    );
   }
 }
