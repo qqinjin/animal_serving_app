@@ -2,6 +2,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_mjpeg/flutter_mjpeg.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'Streamingpage.dart';
+import 'bottomNavigationBar.dart';
+import 'main.dart';
+import 'information_service.dart';
+import 'animal_serving.dart';
+import 'auth_service.dart';
+import 'loginpage.dart';
 
 class StreamingPage extends StatefulWidget {
   @override
@@ -9,8 +17,8 @@ class StreamingPage extends StatefulWidget {
 }
 
 class _StreamingPageState extends State<StreamingPage> {
-  final url = 'http://192.168.178.31:8081/';
-
+  final url = 'http://172.18.60.31:8081/';
+  int _selectedIndex = 1;
   String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
   String formattedTime = DateFormat('hh:mm:ss').format(DateTime.now());
   Timer? _timer;
@@ -39,9 +47,43 @@ class _StreamingPageState extends State<StreamingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Streaming'),
-        backgroundColor: Color.fromARGB(255, 186, 181, 244),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                offset: Offset(0, 2),
+                blurRadius: 4.0,
+              ),
+            ],
+          ),
+          child: AppBar(
+            title: Text(
+              "Setting",
+              style: TextStyle(fontSize: 17.0),
+            ),
+            centerTitle: true,
+            backgroundColor: Color.fromARGB(255, 255, 255, 255),
+            elevation: 0,
+            actions: [
+              TextButton(
+                child: Icon(
+                  Icons.logout,
+                  color: const Color.fromARGB(255, 53, 53, 53),
+                ),
+                onPressed: () {
+                  context.read<AuthService>().signOut();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
       ),
       body: Container(
         color: Color.fromARGB(255, 240, 240, 240),
@@ -59,7 +101,6 @@ class _StreamingPageState extends State<StreamingPage> {
             ),
             SizedBox(height: 8),
             Text(
-
               formattedDate,
               style: TextStyle(
                 fontSize: 18,
@@ -77,7 +118,6 @@ class _StreamingPageState extends State<StreamingPage> {
             ),
             SizedBox(height: 8),
             Text(
-
               formattedTime,
               style: TextStyle(
                 fontSize: 18,
@@ -104,6 +144,10 @@ class _StreamingPageState extends State<StreamingPage> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: _selectedIndex,
+        parentContext: context,
       ),
     );
   }
