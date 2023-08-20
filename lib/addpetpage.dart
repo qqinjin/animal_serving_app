@@ -8,8 +8,6 @@ import 'loginpage.dart';
 import 'anumal_updatepage.dart';
 import 'main.dart';
 
-//import 'main.dart';
-
 class AddPet extends StatefulWidget {
   const AddPet({Key? key}) : super(key: key);
 
@@ -25,6 +23,13 @@ class _AddPetState extends State<AddPet> {
   TextEditingController genderController = TextEditingController(); //성별
   TextEditingController weightController = TextEditingController(); //체중
 
+  String? selectedBreed;
+  String? selectedGender;
+  List<String> breeds = ["dog", "cat", "etc."];
+  List<String> genders = ["male", "female"];
+
+  bool showBreedTextField = false;
+
   void showCompletionDialog() {
     showDialog(
       context: context,
@@ -35,7 +40,7 @@ class _AddPetState extends State<AddPet> {
           actions: <Widget>[
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: Color.fromARGB(255, 186, 181, 244),
+                backgroundColor: Color.fromARGB(255, 186, 181, 244),
               ),
               child: Text('확인'),
               onPressed: () {
@@ -61,7 +66,7 @@ class _AddPetState extends State<AddPet> {
           actions: <Widget>[
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: Color.fromARGB(255, 186, 181, 244),
+                backgroundColor: Color.fromARGB(255, 186, 181, 244),
               ),
               child: Text('확인'),
               onPressed: () {
@@ -82,145 +87,87 @@ class _AddPetState extends State<AddPet> {
         final user = authService.currentUser()!;
 
         return Scaffold(
-          appBar: AppBar(
-            title: Text("반려동물추가"),
-            backgroundColor: Color.fromARGB(255, 186, 181, 244),
-            actions: [
-              TextButton(
-                child: Text(
-                  "로그아웃",
-                  style: TextStyle(
-                    color: Colors.white,
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(kToolbarHeight),
+            child: Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    offset: Offset(0, 2), // 아래쪽으로 오프셋
+                    blurRadius: 4.0,
                   ),
-                ),
-                onPressed: () {
-                  // 로그아웃
-                  context.read<AuthService>().signOut();
-
-                  // 로그인 페이지로 이동
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
-                  );
-                },
+                ],
               ),
-            ],
+              child: AppBar(
+                title: Text(
+                  "Add a pet",
+                  style: TextStyle(fontSize: 17.0),
+                ),
+                centerTitle: true,
+                backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                elevation: 0,
+                actions: [
+                  TextButton(
+                    child: Icon(
+                      Icons.logout,
+                      color: const Color.fromARGB(255, 53, 53, 53),
+                    ),
+                    onPressed: () {
+                      context.read<AuthService>().signOut();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
           ),
           body: Column(
             children: [
               Padding(
-                padding: EdgeInsets.all(16.0),
+                padding: EdgeInsets.all(30.0),
                 child: Column(
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: breedController,
-                              cursorColor: Colors.deepPurple,
-                              decoration: InputDecoration(
-                                hintText: '종',
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.deepPurple,
-                                  ),
-                                ),
-                              ),
-                              onChanged: (value) {
-                                breedController.text = value;
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: nameController,
-                              cursorColor: Colors.deepPurple,
-                              decoration: InputDecoration(
-                                hintText: '이름',
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.deepPurple,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: ageController,
-                              cursorColor: Colors.deepPurple,
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                hintText: '나이',
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.deepPurple,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: genderController,
-                              cursorColor: Colors.deepPurple,
-                              decoration: InputDecoration(
-                                hintText: '성별',
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.deepPurple,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: weightController,
-                              cursorColor: Colors.deepPurple,
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                hintText: '무게',
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.deepPurple,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                    Column(
+                      children: <Widget>[
+                        _buildCustomDropdown(
+                          'species',
+                          breeds,
+                          selectedBreed,
+                          (value) {
+                            if (value == null) return;  
+
+                            setState(() {
+                              selectedBreed = value;
+                              breedController.text = value;
+
+                              if (value == 'etc.') {
+                                showBreedTextField = true;
+                              } else {
+                                showBreedTextField = false;
+                              }
+                            });
+                          },
+                        ),
+                        if (showBreedTextField) _buildCustomTextField('직접 입력해주세요', breedController),
+                        _buildCustomTextField('name', nameController),
+                        _buildCustomTextField('age', ageController),
+                        _buildCustomDropdown(
+                          'gender',
+                          genders,
+                          selectedGender,
+                          (value) {
+                            setState(() {
+                              selectedGender = value!;
+                              genderController.text = value;
+                            });
+                          },
+                        ),
+                        _buildCustomTextField('weight', weightController),
+                      ],
                     ),
                   ],
                 ),
@@ -230,46 +177,174 @@ class _AddPetState extends State<AddPet> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        primary: Color.fromARGB(255, 186, 181, 244),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Color.fromARGB(189, 255, 215, 238), // 시작 색
+                            Color.fromARGB(136, 220, 180, 250), // 끝 색
+                          ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
-                      icon: Icon(Icons.add),
-                      label: Text("추가"),
-                      onPressed: () {
-                        if (breedController.text.isNotEmpty &&
-                            genderController.text.isNotEmpty &&
-                            ageController.text.isNotEmpty &&
-                            weightController.text.isNotEmpty &&
-                            nameController.text.isNotEmpty) {
-                          addpetService.create(
-                            breedController.text,
-                            nameController.text,
-                            ageController.text,
-                            weightController.text,
-                            genderController.text,
-                            user.uid,
-                          );
-                          breedController.clear();
-                          genderController.clear();
-                          ageController.clear();
-                          weightController.clear();
-                          nameController.clear();
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          shadowColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          padding:
+                              MaterialStateProperty.all(EdgeInsets.all(15)),
+                          foregroundColor:
+                              MaterialStateProperty.all(Colors.white),
+                          overlayColor:
+                              MaterialStateProperty.resolveWith<Color?>(
+                                  (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.pressed))
+                              return Color.fromARGB(255, 154, 100, 255)
+                                  .withOpacity(0.5);
+                            return null;
+                          }),
+                          elevation: MaterialStateProperty.all(0),
+                          side: MaterialStateProperty.all(BorderSide.none),
+                          textStyle: MaterialStateProperty.all<TextStyle>(
+                            TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.normal),
+                          ),
+                        ),
+                        child: Text("추가"),
+                        onPressed: () {
+                          if (selectedBreed != null &&
+                              selectedGender != null &&
+                              ageController.text.isNotEmpty &&
+                              weightController.text.isNotEmpty &&
+                              nameController.text.isNotEmpty) {
+                            addpetService.create(
+                              breedController.text,
+                              nameController.text,
+                              ageController.text,
+                              weightController.text,
+                              genderController.text,
+                              user.uid,
+                            );
+                            breedController.clear();
+                            genderController.clear();
+                            ageController.clear();
+                            weightController.clear();
+                            nameController.clear();
 
-                          showCompletionDialog(); // Display completion dialog
-                        } else {
-                          showInputRequiredDialog(); // Display input required dialog
-                        }
-                      },
+                            showCompletionDialog(); // Display completion dialog
+                          } else {
+                            showInputRequiredDialog(); // Display input required dialog
+                          }
+                        },
+                      ),
                     ),
                   ],
                 ),
               ),
-              Divider(height: 1),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _buildCustomDropdown(String label, List<String> items,
+      String? selectedItem, void Function(String?) onChanged) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
+          ),
+          SizedBox(height: 2),
+          DropdownButtonFormField<String>(
+            value: selectedItem,
+            items: items.map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            hint: Text(
+              label,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                color: Color.fromARGB(255, 189, 189, 204),
+              ),
+              ),
+            onChanged: onChanged,
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.all(10.0),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide:
+                    BorderSide(color: Color.fromARGB(255, 195, 195, 195)),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide:
+                    BorderSide(color: Color.fromARGB(255, 137, 137, 137)),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+            ),
+          ),
+          SizedBox(height: 16),
+        ],
+      ),
+    );
+  }
+
+
+  Widget _buildCustomTextField(String label, TextEditingController controller) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            label,
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.normal),
+          ),
+          SizedBox(height: 2),
+          TextFormField(
+            controller: controller,
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.all(10.0),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide:
+                    BorderSide(color: Color.fromARGB(255, 195, 195, 195)),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide:
+                    BorderSide(color: Color.fromARGB(255, 137, 137, 137)),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+            ),
+          ),
+          SizedBox(height: 16),
+        ],
+      ),
     );
   }
 }

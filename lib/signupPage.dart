@@ -36,7 +36,7 @@ class _SignUpPageState extends State<SignUpPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
 
-                SizedBox(height: 20),
+                SizedBox(height: 50),
                 Text(
                   "Create Account,",
                   style: TextStyle(
