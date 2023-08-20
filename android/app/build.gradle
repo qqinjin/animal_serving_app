@@ -69,10 +69,7 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.android.support:multidex:1.0.3'
-<<<<<<< HEAD
     implementation 'com.google.firebase:firebase-messaging:22.0.0'
-=======
     implementation platform('com.google.firebase:firebase-bom:29.0.2')
->>>>>>> 73218a0b5d384e735ee82fcc889d8e3ec7afe72b
 }
 apply plugin: 'com.google.gms.google-services'
