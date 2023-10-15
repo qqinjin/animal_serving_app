@@ -53,13 +53,13 @@
 ## 개발환경
 #### 하드웨어 
 - Raspberry Pi 4 Model B - Linux
-- 
+
 #### 소프트웨어 및 언어
 - Python
 - Flutter (Dart)
 - Firebase
 - Android Studio
-- Google Colab 
+- Google Colab (GPU Standard)
 
 ## 파일 
 - 하드웨어작동 폴더: 라즈베리파이 관련 파일 저장
