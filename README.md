@@ -32,24 +32,39 @@
 |:-------:|:-------:|:-----------:|:-------:|
 | mAP@0.5 |  0.922  |    0.933    |  0.935  |
 
-- 데이터 출처: 데이터는 roboflow 플랫폼.
+- 데이터 출처: 데이터는 roboflow 플랫폼을 사용
 - 데이터 수량: 개와 고양이 이미지를 각각 3,000장씩 사용
-- 데이터 분할: 학습, 검증, 테스트 세트로 데이터를 7:2:1의 비율
+- 데이터 분할: 학습, 검증, 테스트 세트로 데이터를 7:2:1의 비율로 분할
 - 학습 설정:
--- Batch Size: 128,  Epochs: 300
--- 학습 환경: Google Colab의 GPU(Standard) 환경에서 학습을 진행하였습니다.
+  - Batch Size: 128
+  - Epochs: 300
+  - 학습 환경: Google Colab의 GPU(Standard) 환경에서 학습
 
-## 계발환경
+#### 학습 결과 
+ <table>
+  <tr>
+    <td><img src="https://github.com/qqinjin/animal_serving_app/assets/99711238/c945dfc9-5c08-4e55-99e8-3d3a48b8db2b" alt="고양이" width="300, height=300"/></td>
+    <td><img src="https://github.com/qqinjin/animal_serving_app/assets/99711238/0c7cd829-35d7-42d2-85d5-ffeb0892c0dc" alt="강아지" width="300, height=300"/></td>
+  </tr>
+</table>
+
+## 실사 사진
+![배식기실물](https://github.com/qqinjin/animal_serving_app/assets/99711238/91f678f9-19d0-4bf8-81b4-f3dc8ea9787d)
+
+## 개발환경
 #### 하드웨어 
-- Python
 - Raspberry Pi 4 Model B - Linux
-#### 소프트웨어
-- flutter 
-- firebase
-- android studio
-- colab 
-  
+- 
+#### 소프트웨어 및 언어
+- Python
+- Flutter (Dart)
+- Firebase
+- Android Studio
+- Google Colab 
+
 ## 파일 
-- 하드웨어작동 폴더는 라즈베리파이 파일 폴더
-- 나머지는 flutter 코드
+- 하드웨어작동 폴더: 라즈베리파이 관련 파일 저장
+- 인공지능 폴더: YOLO 작동코드
+- 나머지: Flutter (Dart) 코드 저장
+
 
