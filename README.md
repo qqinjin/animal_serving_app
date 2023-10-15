@@ -1,5 +1,9 @@
 # AI 비전을 이용한 반려동물 스마트 배식기
-여러 반려동물을 키우는 사용자들을 위한 스마트 반려동물 배식기 프로젝트입니다. 애플리케이션을 통해 반려동물 정보 입력 후, 실시간 탐지로 개나 고양이 등의 반려동물의 종을 구분해 적절한 사료 배분이 가능합니다. 무게와 온도 측정 기능을 통해 실시간으로 반려동물의 건강상태도 체크할 수 있습니다.
+여러 반려동물을 키우는 사용자들을 위한 스마트 반려동물 배식기 프로젝트입니다. 애플리케이션을 통해 반려동물 정보 입력 후, 실시간 탐지로 개나 고양이 등의 반려동물의 종을 구분해 적절한 사료 배분이 가능합니다. 남은 사료량과 반려동물의 무게 및 온도를 측정하는 기능을 통해 실시간으로 반려동물의 건강상태도 체크할 수 있습니다.
+
+## 서비스 흐름도
+![배식기흐름도](https://github.com/qqinjin/animal_serving_app/assets/99711238/731fd991-e174-4e74-8556-6ebd2094415c)
+
 
 ## 하드웨어 
 ![하드웨어사진](https://github.com/qqinjin/animal_serving_app/assets/99711238/924b0f28-83f8-46b8-87dd-08cda7b65cbc)
@@ -47,7 +51,17 @@
 </table>
 
 ## 실사 사진
+####하드웨어
 ![배식기실물](https://github.com/qqinjin/animal_serving_app/assets/99711238/91f678f9-19d0-4bf8-81b4-f3dc8ea9787d)
+
+####소프트웨어
+<table>
+  <tr>
+    <td><img src="https://github.com/qqinjin/animal_serving_app/assets/99711238/dab129cf-27ea-4ca8-ba28-0fcba66c2de8" alt="어플메인" width="300"/></td>
+    <td><img src="https://github.com/qqinjin/animal_serving_app/assets/99711238/8c3048a8-7f3a-472f-bc8e-0f0cc33c0c50" alt="어플밥주기" width="300"/></td>
+    <td><img src="https://github.com/qqinjin/animal_serving_app/assets/99711238/c22ef20b-e329-4168-b85a-4cc8c234cb9f" alt="어플헬스케어"/></td>
+  </tr>
+</table>
 
 ## 개발환경
 #### 하드웨어 
