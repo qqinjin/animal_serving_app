@@ -18,7 +18,6 @@
   </tr>
 </table>
 
-
 - 다양한 반려동물 관리: 사용자는 앱 내에서 여러 반려동물의 정보를 입력하고 관리할 수 있습니다.
 - 객체 탐지 및 알림: 하드웨어가 탐지한 반려동물의 종류에 따른 알림을 받아, 적절한 사료 배식이 가능합니다.
 - 실시간 모니터링: 앱을 통해 실시간으로 반려동물의 상황을 확인할 수 있습니다.
@@ -44,7 +43,7 @@
  <table>
   <tr>
     <td><img src="https://github.com/qqinjin/animal_serving_app/assets/99711238/c945dfc9-5c08-4e55-99e8-3d3a48b8db2b" alt="고양이" width="300, height=300"/></td>
-    <td><img src="https://github.com/qqinjin/animal_serving_app/assets/99711238/0c7cd829-35d7-42d2-85d5-ffeb0892c0dc" alt="강아지" width="300, height=300"/></td>
+    <td><img src="https://github.com/qqinjin/animal_serving_app/assets/99711238/2c956aff-aecb-4017-8295-135c75d3af9a" alt="강아지" width="300, height=300"/></td>
   </tr>
 </table>
 
