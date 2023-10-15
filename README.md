@@ -20,6 +20,7 @@
     <td><img src="https://github.com/qqinjin/animal_serving_app/assets/99711238/e961a78d-0515-4c79-9a2e-6d5e08066a6e" alt="배식기앱"/></td>
   </tr>
 </table>
+
 - flutter와 firebase 사용
 - 다양한 반려동물 관리: 사용자는 앱 내에서 여러 반려동물의 정보를 입력하고 관리
 - 객체 탐지 및 알림: 하드웨어가 탐지한 반려동물의 종류에 따른 알림을 받아, 적절한 사료 배식이 가능
