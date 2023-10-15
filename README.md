@@ -52,15 +52,17 @@
 </table>
 
 ## 실사 사진
-####하드웨어
+#### 하드웨어
+
 ![배식기실물](https://github.com/qqinjin/animal_serving_app/assets/99711238/91f678f9-19d0-4bf8-81b4-f3dc8ea9787d)
 
-####소프트웨어
+#### 소프트웨어
+
 <table>
   <tr>
-    <td><img src="https://github.com/qqinjin/animal_serving_app/assets/99711238/8e334fc7-b5f0-45e5-8d56-c36065cd877f" alt="어플메인" width="300"/></td><td>&nbsp;</td>
-    <td><img src="https://github.com/qqinjin/animal_serving_app/assets/99711238/3ef77dbf-4784-4090-b562-8e5c5a11ef0d" alt="어플밥주기" width="300"/></td><td>&nbsp;</td>
-    <td><img src="https://github.com/qqinjin/animal_serving_app/assets/99711238/6a2559c7-a2d5-4217-a244-0b0c3c0c3ab4" alt="어플헬스케어"/></td>
+    <td><img src="https://github.com/qqinjin/animal_serving_app/assets/99711238/5b11c8a0-de21-4216-84a9-2f30957ae47f" alt="어플메인"/></td><td>&nbsp;</td>
+    <td><img src="https://github.com/qqinjin/animal_serving_app/assets/99711238/59279079-2bc7-43f5-bb58-f1686a1bf659" alt="어플밥주기"/></td><td>&nbsp;</td>
+    <td><img src="https://github.com/qqinjin/animal_serving_app/assets/99711238/de66dfd6-24e2-46d6-9cad-881e9b63bcb1" alt="어플헬스케어"/></td>
   </tr>
 </table>
 
